@@ -4,7 +4,7 @@ module QueryScope::Equal
     @where_string = ''
     @where_hash = {}
 
-    params = process_params(params, options)
+    params = equal_params(params, options)
     equal_process(params) # 处理相等条件的参数
 
     @where_string.sub!(/^\sand/, '') if @where_string.start_with?(' and')
@@ -39,7 +39,7 @@ module QueryScope::Equal
     params.each do |key, _|
       if column_names.include?(key)
         params["#{table_name}.#{key}"] = params.delete(key.to_s)
-      else
+      elsif !key.include?('.')
         params.delete(key.to_s)
       end
     end

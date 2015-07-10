@@ -15,6 +15,8 @@ module QueryScope
     range_params = filter_range(params)
     equal_params = params.except!(range_params.keys)
 
+    include = include && options.present?
+
     if include && range_params.present?
       includes(options.keys).range_scope(range_params, options).equal_scope(equal_params, options)
     elsif include && range_params.blank?
