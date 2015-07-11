@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    query_scope (0.0.2)
+    default_where (0.0.2)
       rails (>= 3.2)
 
 GEM
@@ -87,4 +87,4 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  query_scope!
+  default_where!
