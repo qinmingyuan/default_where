@@ -37,7 +37,8 @@ module QueryScope::Equal
       end
     end
 
-    params.each do |key, _|
+    # since 1.9 is using lazy iteration
+    params.to_a.each do |key, _|
       if column_names.include?(key)
         params["#{table_name}.#{key}"] = params.delete(key.to_s)
       elsif !key.include?('.')
