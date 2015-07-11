@@ -1,6 +1,6 @@
-require 'query_scope/equal'
-require 'query_scope/range'
 module QueryScope
+  require 'query_scope/equal'
+  require 'query_scope/range'
   include QueryScope::Equal
   include QueryScope::Range
 
