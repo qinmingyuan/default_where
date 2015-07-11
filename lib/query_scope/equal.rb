@@ -32,7 +32,7 @@ module QueryScope::Equal
       value = params.delete(column.to_s)
       if assoc_model && value
         params["#{assoc_model.table_name}.#{column}"] = value
-      else
+      elsif assoc_model.blank?
         raise 'Wrong Association Name'
       end
     end
