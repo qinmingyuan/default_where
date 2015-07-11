@@ -1,4 +1,4 @@
-module QueryScope::Equal
+module DefaultWhere::Equal
 
   def equal_scope(params, options)
     @where_string = ''

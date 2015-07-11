@@ -1,4 +1,4 @@
-module QueryScope::Range
+module DefaultWhere::Range
 
   PATTERN = {
     '>' => /_gt$/,

@@ -1,8 +1,8 @@
-module QueryScope
-  require 'query_scope/equal'
-  require 'query_scope/range'
-  include QueryScope::Equal
-  include QueryScope::Range
+module DefaultWhere
+  require 'default_where/equal'
+  require 'default_where/range'
+  include DefaultWhere::Equal
+  include DefaultWhere::Range
 
   # 参数格式
   # options 格式：
@@ -42,4 +42,4 @@ module QueryScope
 
 end
 
-ActiveRecord::Base.extend QueryScope
+ActiveRecord::Base.extend DefaultWhere
