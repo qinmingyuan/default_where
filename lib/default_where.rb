@@ -8,7 +8,7 @@ module DefaultWhere
   # options 格式：
   # <association_name> => <column_name>
   # student: 'teacher_id'
-  def query_scope(params, options = {}, include = true)
+  def default_where(params, options = {}, include = true)
     params ||= {}
 
     params = filter_params(params)
@@ -27,6 +27,8 @@ module DefaultWhere
       equal_scope(equal_params, options)
     end
   end
+
+  alias :query_scope :default_where
 
   private
   # remove blank values
