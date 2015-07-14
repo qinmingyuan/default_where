@@ -8,7 +8,7 @@ module DefaultWhere
   # options 格式：
   # <association_name> => <column_name>
   # student: 'teacher_id'
-  def default_where(params, options = {}, include = true)
+  def default_where(params, include = true, options = {})
     params ||= {}
 
     params = filter_params(params)
