@@ -26,7 +26,11 @@ module DefaultWhere::Range
       key = origin_key.sub(PATTERN[compare], '')
 
       @range_string << " and #{key} #{compare} :#{origin_key}"
-      @range_hash.merge! origin_key.to_sym => value
+      if value.to_i.to_s == value
+        @range_hash.merge! origin_key.to_sym => value.to_i
+      else
+        @range_hash.merge! origin_key.to_sym => value
+      end
     end
 
     params

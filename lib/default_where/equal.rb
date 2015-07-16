@@ -21,7 +21,11 @@ module DefaultWhere::Equal
       origin_key = key.split('.').last
 
       @where_string << " and #{key} = :#{origin_key}"
-      @where_hash.merge! origin_key.to_sym => value
+      if value.to_i.to_s == value
+        @where_hash.merge! origin_key.to_sym => value.to_i
+      else
+        @where_hash.merge! origin_key.to_sym => value
+      end
     end
   end
 
