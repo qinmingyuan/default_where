@@ -8,7 +8,7 @@ This Library set default params process for where query in ActiveRecord
 
 ```ruby
 #  Parameters: {"role_id"=>"1", "age"=>"20", "teacher_id"=> "2"}
-User.includes(:student).where(role_id: 1, age: 20, student: {teacher_id: 2})
+User.includes(:student).where(role_id: params[:role_id], age: params[:age], student: {teacher_id: params[:teacher_id]})
 
 ```
 
@@ -17,7 +17,7 @@ User.includes(:student).where(role_id: 1, age: 20, student: {teacher_id: 2})
 ```ruby
 User.default_where(params, student: :teacher_id)
 
-It will generate the query scope to above
+# It will generate the query scope to above
 ```
 
 ## Features
@@ -25,7 +25,7 @@ It will generate the query scope to above
 
 ```ruby
 # if not remove blank query params
-users = Users.where(role_id: 1)
-users = users.where(age: 20) if params[:age]
+users = Users.where(role_id: params[:role_id])
+users = users.where(age: params[:age]) if params[:age]
 ```
 
