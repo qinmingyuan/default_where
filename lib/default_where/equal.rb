@@ -23,6 +23,10 @@ module DefaultWhere::Equal
       @where_string << " and #{key} = :#{origin_key}"
       if value.to_i.to_s == value
         @where_hash.merge! origin_key.to_sym => value.to_i
+      elsif 'true' == value
+        @where_hash.merge! origin_key.to_sym => true
+      elsif 'false' == value
+        @where_hash.merge! origin_key.to_sym => false
       else
         @where_hash.merge! origin_key.to_sym => value
       end
