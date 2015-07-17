@@ -37,7 +37,8 @@ module DefaultWhere::Equal
   def equal_params(params, options)
     options.each do |assoc, column|
       assoc_model = reflections[assoc.to_sym]
-      value = params[column]
+      value = params[column.to_s]
+
       if assoc_model && value
         params["#{assoc_model.table_name}.#{column}"] = value
         params.delete(column.to_s)
