@@ -33,15 +33,14 @@ module DefaultWhere::Equal
     end
   end
 
-  # 带表格的参数
+  # params with table
   def equal_params(params, options)
     options.each do |assoc, column|
       assoc_model = reflections[assoc.to_sym]
-      value = params.delete(column.to_s)
+      value = params[column]
       if assoc_model && value
         params["#{assoc_model.table_name}.#{column}"] = value
-      elsif assoc_model.blank?
-        raise 'Wrong Association Name'
+        params.delete(column.to_s)
       end
     end
 

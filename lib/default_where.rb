@@ -8,14 +8,14 @@ module DefaultWhere
   # options 格式：
   # <association_name> => <column_name>
   # student: 'teacher_id'
-  def default_where(params, include = true, options = {})
+  def default_where(params, options = {}, include = true)
     params ||= {}
 
     params = filter_params(params)
     range_params = filter_range(params)
     equal_params = params.except!(range_params.keys)
 
-    include = include && options.present?
+    include = options.present? && include
 
     if include && range_params.present?
       includes(options.keys).range_scope(range_params, options).equal_scope(equal_params, options)
