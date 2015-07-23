@@ -4,8 +4,7 @@ module DefaultWhere
   include DefaultWhere::Equal
   include DefaultWhere::Range
 
-  # 参数格式
-  # options 格式：
+  # options：
   # <association_name> => <column_name>
   # student: 'teacher_id'
   def default_where(params, options = {}, include = true)

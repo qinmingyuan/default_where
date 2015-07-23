@@ -5,7 +5,7 @@ module DefaultWhere::Equal
     @where_hash = {}
 
     params = equal_params(params, options)
-    equal_process(params) # 处理相等条件的参数
+    equal_process(params) # process equal params
 
     @where_string.sub!(/^\sand/, '') if @where_string.start_with?(' and')
 
@@ -15,7 +15,7 @@ module DefaultWhere::Equal
   end
 
   private
-  # 处理等于参数
+  # process equal params
   def equal_process(params)
     params.each do |key, value|
       origin_key = key.split('.').last

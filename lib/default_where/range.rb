@@ -11,7 +11,7 @@ module DefaultWhere::Range
     @range_string = ''
     @range_hash = {}
 
-    range_process(params, options) # 处理范围查询的参数
+    range_process(params, options) # process range params
 
     @range_string.sub!(/^\sand/, '') if @range_string.start_with?(' and')
 
@@ -20,7 +20,6 @@ module DefaultWhere::Range
     where(condition)
   end
 
-  # 处理范围参数
   def range_process_compare(params, compare)
     params.each do |origin_key, value|
       key = origin_key.sub(PATTERN[compare], '')
@@ -37,12 +36,11 @@ module DefaultWhere::Range
   end
 
 
-  # 带表格的参数
-  # 先检查是否有范围查询的参数，生成范围的条件
-  # gt: 大于
-  # gte: 大于等于
-  # lt: 小于
-  # lte: 小于等于
+  # process with table
+  # gt: greater than
+  # gte: greater than or equal to
+  # lt: less than
+  # lte: less than or equal to
   def range_process(params, options)
     options.each do |assoc, column|
       assoc_model = reflections[assoc.to_sym]
