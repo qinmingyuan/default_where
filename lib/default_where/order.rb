@@ -1,13 +1,7 @@
 module DefaultWhere::Order
 
-  PATTERN = {
-    '>' => /_gt$/,
-    '>=' => /_gte$/,
-    '<' => /_lt$/,
-    '<=' => /_lte$/
-  }
 
-  def range_scope(params, options)
+  def order_scope(params, options)
     @range_string = ''
     @range_hash = {}
 
@@ -17,7 +11,7 @@ module DefaultWhere::Order
 
     condition = [@range_string, @range_hash]
 
-    where(condition)
+    order(condition)
   end
 
   def range_process_compare(params, compare)

@@ -28,7 +28,7 @@ module DefaultWhere
     end
 
     if order_params
-      default_where(params, options, include).order_scope(order_params)
+      default_where(params, options, include).order_scope(order_params, options)
     end
   end
 
