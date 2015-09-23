@@ -14,6 +14,8 @@ User.includes(:student).where(role_id: params[:role_id], age: params[:age], stud
 
 - after Use default_where
 
+params must use string key
+
 ```ruby
 User.default_where(params, student: :teacher_id)
 
@@ -28,4 +30,5 @@ User.default_where(params, student: :teacher_id)
 users = Users.where(role_id: params[:role_id])
 users = users.where(age: params[:age]) if params[:age]
 ```
+
 
