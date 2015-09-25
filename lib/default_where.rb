@@ -10,6 +10,8 @@ module DefaultWhere
   # <association_name> => <column_name>
   # student: 'teacher_id'
   def default_where(params = {}, options = {}, include = true)
+    return all if params.blank?
+
     params = filter_params(params)
     range_params = filter_range(params)
     order_params = filter_order(params)
