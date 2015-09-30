@@ -6,4 +6,11 @@ class DefaultWhereTest < ActiveSupport::TestCase
     assert_kind_of Module, DefaultWhere
   end
 
+  test "" do
+    params = { id: 1, uid: 2, name: 3 }
+    options = { signs: 'name' }
+
+
+  end
+
 end

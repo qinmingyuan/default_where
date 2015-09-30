@@ -6,12 +6,19 @@ module DefaultWhere
       '<' => /_lt$/,
       '<=' => /_lte$/
     }
+    SPATTERN = {
+      '_gt' => '>',
+      '_gte' => '>=',
+      '_lt' => '<',
+      '_lte' => '<='
+    }
 
-    def range_scope(params, options)
+
+    def range_scope(params)
       @range_string = ''
       @range_hash = {}
 
-      range_process(params, options)
+      range_process(params)
 
       @range_string.sub!(/^\sand/, '') if @range_string.start_with?(' and')
 
@@ -25,21 +32,11 @@ module DefaultWhere
     # gte: greater than or equal to
     # lt: less than
     # lte: less than or equal to
-    def range_process(params, options)
-
-      params.each do |key, _|
-        params["#{table_name}.#{key}"] = params.delete(key.to_s)
+    def range_process(params)
+      SPATTERN.each do |k, v|
+        gt_options = params.select { |key, _| key.end_with?(k) }
+        range_process_compare(gt_options, v)
       end
-
-      gt_options = params.select { |key, _| key.end_with?('_gt') }
-      gte_options = params.select { |key, _| key.end_with?('_gte') }
-      lt_options = params.select { |key, _| key.end_with?('_lt') }
-      lte_options = params.select { |key, _| key.end_with?('_lte') }
-
-      range_process_compare(gt_options, '>')
-      range_process_compare(gte_options, '>=')
-      range_process_compare(lt_options, '<')
-      range_process_compare(lte_options, '<=')
     end
 
     def range_process_compare(params, compare)

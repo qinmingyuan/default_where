@@ -13,10 +13,7 @@ module DefaultWhere
   def default_where(params = {}, options = {})
     return all if params.blank?
 
-    params.stringify_keys!
-    params.compact!
-
-    check_options(options)
+    params = params_with_table(params, options)
 
     range_params = filter_range(params)
     params = params.except!(range_params.keys)
@@ -43,8 +40,6 @@ module DefaultWhere
     end
   end
 
-  private
-
   def filter_range(params)
     params.select do |k, _|
       k.end_with?('_gt', '_gte', '_lt', '_lte')
@@ -57,20 +52,33 @@ module DefaultWhere
     end
   end
 
-  def check_options(options)
-    options.each do |assoc, column|
-      assoc_model = reflections[assoc.to_sym]
-      value = params[column.to_s]
+  # params with table
+  def params_with_table(params, options)
+    params.stringify_keys!
+    params.compact!
 
-      if assoc_model && value
-        params.select{ |k, _| k.start_with?(column.to_s) }.each do |key, _|
-          params["#{assoc_model.table_name}.#{key}"] = value
+    options.each do |assoc, column|
+      assoc_model = reflections[assoc.to_s]
+
+      if assoc_model
+        params.select{ |k, _| k.start_with?(column.to_s) }.each do |k, _|
+          params["#{assoc_model.table_name}.#{k}"] = params.delete(k)
         end
-        params.delete(column.to_s)
       else
         raise 'Wrong Association Name'
       end
     end
+
+    # since 1.9 is using lazy iteration
+    params.to_a.each do |key, _|
+      if column_names.include?(key)
+        params["#{table_name}.#{key}"] = params.delete(key.to_s)
+      elsif !key.include?('.')
+        params.delete(key.to_s)
+      end
+    end
+
+    params
   end
 
 end
