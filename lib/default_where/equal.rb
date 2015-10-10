@@ -22,17 +22,25 @@ module DefaultWhere
         origin_key = key.split('.').last
 
         @where_string << " and #{key} = :#{origin_key}"
-        if value.to_i.to_s == value
+
+        #if value.to_i.to_s == value
+        if columns_hash[origin_key].type == :integer
           @where_hash.merge! origin_key.to_sym => value.to_i
-        elsif 'true' == value
-          @where_hash.merge! origin_key.to_sym => true
-        elsif 'false' == value
-          @where_hash.merge! origin_key.to_sym => false
+        elsif columns_hash[origin_key].type == :boolean
+          @where_hash.merge! origin_key.to_sym => value.to_bool
         else
           @where_hash.merge! origin_key.to_sym => value
         end
       end
     end
 
+  end
+end
+
+class String
+  def to_bool
+    return true   if self == true   || self =~ (/(true|t|yes|y|1)$/i)
+    return false  if self == false  || self.blank? || self =~ (/(false|f|no|n|0)$/i)
+    raise ArgumentError.new("invalid value for Boolean: \"#{self}\"")
   end
 end
