@@ -27,17 +27,10 @@ module DefaultWhere
       includes(options.keys)
     end
 
-    if range_params.present?
-      range_scope(range_params, options)
-    end
+    range_scope(range_params)
+    equal_scope(equal_params)
 
-    if equal_params.present?
-      equal_scope(equal_params, options)
-    end
-
-    if order_params
-      order_scope(order_params, options)
-    end
+    #order_scope(order_params, options)
   end
 
   def filter_range(params)
