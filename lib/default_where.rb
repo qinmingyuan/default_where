@@ -13,7 +13,7 @@ module DefaultWhere
   def default_where(params = {}, options = {})
     return all if params.blank?
 
-    params = params.deep_dup
+    params = params.to_h
     params = params_with_table(params, options)
 
     range_params = filter_range(params)
