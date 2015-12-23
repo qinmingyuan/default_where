@@ -24,7 +24,7 @@ module DefaultWhere
 
       condition = [@range_string, @range_hash]
 
-      where(condition)
+      where(*condition)
     end
 
     # process with table

@@ -11,7 +11,7 @@ module DefaultWhere
 
       condition = [@where_string, @where_hash]
 
-      where(condition)
+      where(*condition)
     end
 
     private
