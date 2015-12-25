@@ -37,7 +37,7 @@ User.default_where(params)
 ### Range params
 - params
 ```ruby
-{ 'role_id-lte': 2 }
+{ 'role_id_lte': 2 }
 ```
 - Before use `default_where`
 ```ruby
@@ -62,7 +62,7 @@ User.default_where(params)
 ### Order params
 - Params
 ```ruby
-{ 'role_id': 1, 'o1': 'age+asc', 'o2': 'last_login_at+asc' }
+{ 'role_id': 1, 'o1': 'age_asc', 'o2': 'last_login_at_asc' }
 ```
 - Before use `default_where`
 ```ruby
