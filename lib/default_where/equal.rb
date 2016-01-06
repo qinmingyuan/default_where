@@ -7,7 +7,7 @@ module DefaultWhere
 
       equal_process(params)
 
-      @where_string.sub!(/^\sand/, '') if @where_string.start_with?(' and')
+      @where_string.sub!(/^\sand\s/, '') if @where_string.start_with?(' and')
 
       condition = [@where_string, @where_hash]
 
@@ -15,7 +15,6 @@ module DefaultWhere
     end
 
     private
-    # process equal params
     def equal_process(params)
       params.each do |key, value|
         origin_key = key.split('.').last

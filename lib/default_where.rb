@@ -23,8 +23,8 @@ module DefaultWhere
       includes(tables)
     end
 
-    range_scope(range_params)
     equal_scope(equal_params)
+    range_scope(range_params)
     order_scope(order_params)
   end
 
@@ -40,10 +40,11 @@ module DefaultWhere
     end
   end
 
-  # params with table
   def params_with_table(params)
     params.stringify_keys!
     params.compact!
+
+    tables = []
 
     params.each do |k, _|
       if k =~ /-/
