@@ -19,13 +19,9 @@ module DefaultWhere
     order_params = filter_order(params)
     equal_params = params.except!(order_params.keys)
 
-    if tables.present? && !self.values.keys.include?(:includes) # 本身不包含includes方法
-      includes(tables)
-    end
-
-    equal_scope(equal_params)
-    range_scope(range_params)
-    order_scope(order_params)
+    includes(tables).equal_scope(equal_params)
+      .range_scope(range_params)
+      .order_scope(order_params)
   end
 
   def filter_range(params)
