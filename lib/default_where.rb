@@ -26,24 +26,25 @@ module DefaultWhere
 
   def params_with_table(params)
     params.stringify_keys!
-    params.compact!
+    params.compact!  # todo,需确认是否有必要
 
     tables = []
 
-    params.each do |k, _|
-      if k =~ /-/
-        assoc, column = k.split('-')
-        assoc_model = reflections[assoc]
-        params["#{assoc_model.table_name}.#{column}"] = params.delete(k) if assoc_model
-      end
-    end
-
     # since 1.9 is using lazy iteration
     params.to_a.each do |key, _|
+      if key =~ /-/
+        assoc, column = key.split('-')
+        assoc_model = reflections[assoc]
+        if assoc_model
+          params["#{assoc_model.table_name}.#{column}"] = params.delete(key)
+          tables << assoc.to_sym
+        end
+      end
+
       if column_names.include?(key)
-        params["#{table_name}.#{key}"] = params.delete(key.to_s)
+        params["#{table_name}.#{key}"] = params.delete(key)
       elsif !key.include?('.')
-        params.delete(key.to_s)
+        params.delete(key)
       end
     end
 

@@ -5,14 +5,18 @@ module DefaultWhere
       where_string = ''
       where_hash = {}
 
+
+
       params.each do |key, value|
-        origin_key = key.split('.').last
+        table, origin_key = key.split('.')
 
         where_string << " AND #{key} = :#{origin_key}"
 
-        if columns_hash[origin_key].type == :integer
+        type = table.classify.constantize.columns_hash[origin_key].type
+
+        if type == :integer
           where_hash.merge! origin_key.to_sym => value.to_i
-        elsif columns_hash[origin_key].type == :boolean
+        elsif type == :boolean
           where_hash.merge! origin_key.to_sym => to_bool(value)
         else
           where_hash.merge! origin_key.to_sym => value
