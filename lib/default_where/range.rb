@@ -35,6 +35,11 @@ module DefaultWhere
       where(condition)
     end
 
+    def filter_range(params)
+      params.select do |k, _|
+        k.end_with?('_gt', '_gte', '_lt', '_lte')
+      end
+    end
 
   end
 end

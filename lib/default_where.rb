@@ -24,18 +24,6 @@ module DefaultWhere
       .order_scope(order_params)
   end
 
-  def filter_range(params)
-    params.select do |k, _|
-      k.end_with?('_gt', '_gte', '_lt', '_lte')
-    end
-  end
-
-  def filter_order(params)
-    params.select do |k, v|
-      k =~ /o\d/ && v.end_with?('_asc', '_desc')
-    end
-  end
-
   def params_with_table(params)
     params.stringify_keys!
     params.compact!
