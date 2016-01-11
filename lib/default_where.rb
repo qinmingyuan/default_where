@@ -26,7 +26,7 @@ module DefaultWhere
 
   def params_with_table(params)
     params.stringify_keys!
-    params.compact!  # todo,需确认是否有必要
+    params.reject! { |_, value| value.blank? }
 
     tables = { table_name => self.name }
     as_s = []
