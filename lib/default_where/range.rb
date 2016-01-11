@@ -8,19 +8,23 @@ module DefaultWhere
       '_lte' => '<='
     }
 
-    def range_scope(params)
+    def range_scope(params, tables)
       where_string = ''
       where_hash = {}
 
-      PATTERN.each do |k, compare|
-        gt_options = params.select { |key, _| key.end_with?(k) }
+      PATTERN.each do |pt, compare|
+        options = params.select{ |key, _| key.end_with?(pt) }
 
-        gt_options.each do |origin_key, value|
-          exp = Regexp.new(k + '$')
+        options.each do |origin_key, value|
+          exp = Regexp.new(pt + '$')
           key = origin_key.sub(exp, '')
+          table, _ = key.split('.')
 
           where_string << " AND #{key} #{compare} :#{origin_key}"
-          if columns_hash[origin_key].type == :integer
+
+          type = tables[table].constantize.columns_hash[origin_key].type
+
+          if type == :integer
             where_hash.merge! origin_key.to_sym => value.to_i
           else
             where_hash.merge! origin_key.to_sym => value

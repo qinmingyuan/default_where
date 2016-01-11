@@ -11,7 +11,7 @@ module DefaultWhere
     return all if params.blank?
 
     params = params.to_h
-    params, tables = params_with_table(params)
+    params, tables, as_s = params_with_table(params)
 
     range_params = filter_range(params)
     params = params.except!(range_params.keys)
@@ -19,8 +19,8 @@ module DefaultWhere
     order_params = filter_order(params)
     equal_params = params.except!(order_params.keys)
 
-    includes(tables).equal_scope(equal_params)
-      .range_scope(range_params)
+    joins(as_s).equal_scope(equal_params, tables)
+      .range_scope(range_params, tables)
       .order_scope(order_params)
   end
 
@@ -28,16 +28,19 @@ module DefaultWhere
     params.stringify_keys!
     params.compact!  # todo,需确认是否有必要
 
-    tables = []
+    tables = { table_name => self.name }
+    as_s = []
 
     # since 1.9 is using lazy iteration
     params.to_a.each do |key, _|
       if key =~ /-/
-        assoc, column = key.split('-')
-        assoc_model = reflections[assoc]
-        if assoc_model
-          params["#{assoc_model.table_name}.#{column}"] = params.delete(key)
-          tables << assoc.to_sym
+        as, col = key.split('-')
+        as_s << as.to_sym
+
+        as_model = reflections[as]
+        if as_model
+          params["#{as_model.table_name}.#{col}"] = params.delete(key)
+          tables[as_model.table_name] = as_model.class_name
         end
       end
 
@@ -48,7 +51,7 @@ module DefaultWhere
       end
     end
 
-    [params, tables]
+    [params, tables, as_s]
   end
 
 end
