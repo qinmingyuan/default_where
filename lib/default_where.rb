@@ -10,16 +10,20 @@ module DefaultWhere
   def default_where(params = {})
     return all if params.blank?
 
-    params, tables, as_s = params_with_table(params)
+    params, tables = params_with_table(params)
 
     range_params = filter_range(params)
     params = params.except!(range_params.keys)
 
     order_params = filter_order(params)
-    equal_params = params.except!(order_params.keys)
+    params = params.except!(order_params.keys)
 
-    joins(as_s).equal_scope(equal_params, tables)
-      .range_scope(range_params, tables)
+    not_params = filter_not(params)
+    equal_params = params.except!(not_params.keys)
+
+    joins(tables.keys).equal_scope(equal_params)
+      .not_scope(not_params)
+      .range_scope(range_params)
       .order_scope(order_params)
   end
 
@@ -29,19 +33,17 @@ module DefaultWhere
     params.stringify_keys!
     params.reject! { |_, value| value.blank? }
 
-    tables = { table_name => self.name }
-    as_s = []
+    tables = { }
 
     # since 1.9 is using lazy iteration
     params.to_a.each do |key, _|
       if key =~ /-/
         as, col = key.split('-')
-        as_s << as.to_sym
-
         as_model = reflections[as]
+
         if as_model
           params["#{as_model.table_name}.#{col}"] = params.delete(key)
-          tables[as_model.table_name] = as_model.class_name
+          tables[as] = as_model.table_name
         end
       end
 
@@ -52,7 +54,7 @@ module DefaultWhere
       end
     end
 
-    [params, tables, as_s]
+    [params, tables]
   end
 
 end

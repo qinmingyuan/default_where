@@ -1,7 +1,7 @@
 module DefaultWhere
-  module Equal
+  module Not
 
-    def equal_scope(params)
+    def not_scope(params)
       where_string = ''
       where_hash = {}
 
@@ -13,7 +13,13 @@ module DefaultWhere
       where_string.sub!(/^ AND /, '') if where_string.start_with?(' AND ')
       condition = [where_string, where_hash]
 
-      where(condition)
+      where.not(condition)
+    end
+
+    def filter_not(params)
+      params.select do |k, _|
+        k.end_with?('_not')
+      end
     end
 
   end
