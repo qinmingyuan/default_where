@@ -10,8 +10,6 @@ module DefaultWhere
   def default_where(params = {})
     return all if params.blank?
 
-    params.permit! if params.respond_to?(:permitted?) && !params.permitted?
-    params = params.to_h
     params, tables, as_s = params_with_table(params)
 
     range_params = filter_range(params)
@@ -26,6 +24,8 @@ module DefaultWhere
   end
 
   def params_with_table(params)
+    params.permit! if params.respond_to?(:permitted?) && !params.permitted?
+    params = params.to_h
     params.stringify_keys!
     params.reject! { |_, value| value.blank? }
 
