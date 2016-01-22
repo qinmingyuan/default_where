@@ -18,7 +18,7 @@ module DefaultWhere
 
     def filter_not(params)
       params.select do |k, _|
-        k.end_with?('_not')
+        k.end_with?('-not')
       end
     end
 

@@ -2,10 +2,10 @@ module DefaultWhere
   module Range
 
     PATTERN = {
-      '_gt' => '>',
-      '_gte' => '>=',
-      '_lt' => '<',
-      '_lte' => '<='
+      '-gt' => '>',
+      '-gte' => '>=',
+      '-lt' => '<',
+      '-lte' => '<='
     }
 
     def range_scope(params)
@@ -19,9 +19,9 @@ module DefaultWhere
           exp = Regexp.new(char + '$')
           real_key = key.sub(exp, '')
 
-          where_string << " AND #{real_key} #{compare} :#{key}"
+          where_string << " AND #{real_key} #{sign} :#{key}"
 
-          where_hash.merge! origin_key.to_sym => value
+          where_hash.merge! key.to_sym => value
         end
       end
 
@@ -34,7 +34,7 @@ module DefaultWhere
 
     def filter_range(params)
       params.select do |k, _|
-        k.end_with?('_gt', '_gte', '_lt', '_lte')
+        k.end_with?(*PATTERN.keys)
       end
     end
 

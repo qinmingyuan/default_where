@@ -1,9 +1,9 @@
-require 'default_where/equal'
+require 'default_where/not'
 require 'default_where/range'
 require 'default_where/order'
 
 module DefaultWhere
-  include DefaultWhere::Equal
+  include DefaultWhere::Not
   include DefaultWhere::Range
   include DefaultWhere::Order
 
@@ -21,15 +21,18 @@ module DefaultWhere
     not_params = filter_not(params)
     equal_params = params.except!(not_params.keys)
 
-    joins(tables.keys).equal_scope(equal_params)
+    joins(tables.keys).where(equal_params)
       .not_scope(not_params)
       .range_scope(range_params)
       .order_scope(order_params)
   end
 
   def params_with_table(params)
-    params.permit! if params.respond_to?(:permitted?) && !params.permitted?
-    params = params.to_h
+    if params.respond_to?(:permitted?) && !params.permitted?
+      params.permit!
+      params = params.to_h
+    end
+
     params.stringify_keys!
     params.reject! { |_, value| value.blank? }
 
@@ -37,21 +40,22 @@ module DefaultWhere
 
     # since 1.9 is using lazy iteration
     params.to_a.each do |key, _|
-      if key =~ /-/
-        as, col = key.split('-')
+      if key =~ /\./
+        as, col = key.split('.')
+        f_col, _ = col.split('-')
         as_model = reflections[as]
 
-        if as_model
+        if as_model && as_model.klass.column_names.include?(f_col)
           params["#{as_model.table_name}.#{col}"] = params.delete(key)
           tables[as] = as_model.table_name
         end
+      else
+        f_key, _ = key.split('-')
+        if column_names.include?(f_key)
+          params["#{table_name}.#{key}"] = params.delete(key)
+        end
       end
-
-      if column_names.include?(key)
-        params["#{table_name}.#{key}"] = params.delete(key)
-      elsif !key.include?('.')
-        params.delete(key)
-      end
+      params.delete(key)
     end
 
     [params, tables]

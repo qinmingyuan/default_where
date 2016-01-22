@@ -23,7 +23,7 @@ User.default_where(params)
 
 - params
 ```ruby
-{ 'role_id' => 1, 'student-teacher_id' => 2 }
+{ 'role_id' => 1, 'role.id' => 2 }
 ```
 - Before use `default_where`
 ```ruby
