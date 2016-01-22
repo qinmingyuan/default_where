@@ -2,18 +2,14 @@ module DefaultWhere
   module Not
 
     def not_scope(params)
-      where_string = ''
       where_hash = {}
 
       params.each do |key, value|
-        where_string << " AND #{key} = :#{key}"
-        where_hash.merge! key.to_sym => value
+        real_key = key.sub(/-not$/, '')
+        where_hash.merge! real_key.to_sym => value
       end
 
-      where_string.sub!(/^ AND /, '') if where_string.start_with?(' AND ')
-      condition = [where_string, where_hash]
-
-      where.not(condition)
+      where.not(where_hash)
     end
 
     def filter_not(params)
