@@ -30,9 +30,9 @@ module DefaultWhere
   def params_with_table(params)
     if params.respond_to?(:permitted?) && !params.permitted?
       params.permit!
-      params = params.to_h
     end
 
+    params = params.to_h
     params.stringify_keys!
     params.reject! { |_, value| value.blank? }
 
