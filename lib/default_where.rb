@@ -53,9 +53,10 @@ module DefaultWhere
         f_key, _ = key.split('-')
         if column_names.include?(f_key)
           params["#{table_name}.#{key}"] = params.delete(key)
+        else
+          params.delete(key)
         end
       end
-      params.delete(key)
     end
 
     [params, tables]
