@@ -48,6 +48,8 @@ module DefaultWhere
         if as_model && as_model.klass.column_names.include?(f_col)
           params["#{as_model.table_name}.#{col}"] = params.delete(key)
           tables << as.to_sym
+        else
+          params.delete(key)
         end
       else
         f_key, _ = key.split('-')
