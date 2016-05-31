@@ -13,13 +13,13 @@ module DefaultWhere
     params, tables = params_with_table(params)
 
     range_params = filter_range(params)
-    params = params.except!(range_params.keys)
+    params = params.except!(*range_params.keys)
 
     order_params = filter_order(params)
-    params = params.except!(order_params.keys)
+    params = params.except!(*order_params.keys)
 
     not_params = filter_not(params)
-    equal_params = params.except!(not_params.keys)
+    equal_params = params.except!(*not_params.keys)
 
     joins(tables).where(equal_params)
       .not_scope(not_params)
@@ -40,6 +40,7 @@ module DefaultWhere
 
     # since 1.9 is using lazy iteration
     params.to_a.each do |key, _|
+
       if key =~ /\./
         as, col = key.split('.')
         f_col, _ = col.split('-')
@@ -59,6 +60,7 @@ module DefaultWhere
           params.delete(key)
         end
       end
+
     end
 
     [params, tables]
