@@ -9,7 +9,11 @@ module DefaultWhere
         where_hash.merge! real_key.to_sym => value
       end
 
-      where.not(where_hash)
+      if where_hash.present?
+        where.not(where_hash)
+      else
+        all
+      end
     end
 
     def filter_not(params)
