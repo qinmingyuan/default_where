@@ -34,7 +34,7 @@ module DefaultWhere
 
     params = params.to_h
     params.stringify_keys!
-    params.reject! { |_, value| value.blank? }
+    params.reject! { |_, value| value == '' }
 
     tables = []
 
