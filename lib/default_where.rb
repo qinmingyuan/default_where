@@ -7,10 +7,10 @@ module DefaultWhere
   include DefaultWhere::Range
   include DefaultWhere::Order
 
-  def default_where(params = {})
+  def default_where(params = {}, options = {})
     return all if params.blank?
 
-    params, tables = params_with_table(params)
+    params, tables = params_with_table(params, options)
 
     range_params = filter_range(params)
     params = params.except!(*range_params.keys)
@@ -21,20 +21,26 @@ module DefaultWhere
     not_params = filter_not(params)
     equal_params = params.except!(*not_params.keys)
 
-    joins(tables).where(equal_params)
+    includes(tables).where(equal_params).references(tables)
       .not_scope(not_params)
       .range_scope(range_params)
       .order_scope(order_params)
   end
 
-  def params_with_table(params)
+  def params_with_table(params, options)
+    default_reject = ['', nil]
+
+    if options[:allow_nil]
+      default_reject.delete(nil)
+    end
+
     if params.respond_to?(:permitted?) && !params.permitted?
       params.permit!
     end
 
     params = params.to_h
     params.stringify_keys!
-    params.reject! { |_, value| value == '' }
+    params.reject! { |_, value| default_reject.include?(value) }
 
     tables = []
 

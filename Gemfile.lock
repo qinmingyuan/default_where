@@ -7,27 +7,21 @@ PATH
 GEM
   remote: https://rubygems.org/
   specs:
-    activemodel (5.0.0.beta1)
-      activesupport (= 5.0.0.beta1)
-      builder (~> 3.1)
-    activerecord (5.0.0.beta1)
-      activemodel (= 5.0.0.beta1)
-      activesupport (= 5.0.0.beta1)
+    activemodel (5.0.0)
+      activesupport (= 5.0.0)
+    activerecord (5.0.0)
+      activemodel (= 5.0.0)
+      activesupport (= 5.0.0)
       arel (~> 7.0)
-    activesupport (5.0.0.beta1)
-      concurrent-ruby (~> 1.0)
+    activesupport (5.0.0)
+      concurrent-ruby (~> 1.0, >= 1.0.2)
       i18n (~> 0.7)
-      json (~> 1.7, >= 1.7.7)
-      method_source
       minitest (~> 5.1)
       tzinfo (~> 1.1)
     arel (7.0.0)
-    builder (3.2.2)
-    concurrent-ruby (1.0.0)
+    concurrent-ruby (1.0.2)
     i18n (0.7.0)
-    json (1.8.3)
-    method_source (0.8.2)
-    minitest (5.8.3)
+    minitest (5.9.0)
     thread_safe (0.3.5)
     tzinfo (1.2.2)
       thread_safe (~> 0.1)
@@ -39,4 +33,4 @@ DEPENDENCIES
   default_where!
 
 BUNDLED WITH
-   1.11.2
+   1.12.5
