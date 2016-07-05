@@ -28,7 +28,7 @@ module DefaultWhere
   end
 
   def params_with_table(params, options)
-    default_reject = ['', nil]
+    default_reject = ['', ' ', nil]
 
     if options[:allow_nil]
       default_reject.delete(nil)
