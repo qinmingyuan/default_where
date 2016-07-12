@@ -8,7 +8,7 @@ module DefaultWhere
   include DefaultWhere::Order
 
   def default_where(params = {}, options = {})
-    return all if params.blank?
+    return all if params.empty?
 
     params, tables = params_with_table(params, options)
 
@@ -27,13 +27,14 @@ module DefaultWhere
       .order_scope(order_params)
   end
 
-  def params_with_table(params, options)
+  def params_with_table(params = {}, options = {})
     default_reject = ['', ' ', nil]
 
     if options[:allow_nil]
       default_reject.delete(nil)
     end
 
+    # todo secure bug
     if params.respond_to?(:permitted?) && !params.permitted?
       params.permit!
     end
@@ -42,7 +43,7 @@ module DefaultWhere
     params.stringify_keys!
     params.reject! { |_, value| default_reject.include?(value) }
 
-    tables = []
+    refs = []
 
     # since 1.9 is using lazy iteration
     params.to_a.each do |key, _|
@@ -54,7 +55,7 @@ module DefaultWhere
 
         if as_model && as_model.klass.column_names.include?(f_col)
           params["#{as_model.table_name}.#{col}"] = params.delete(key)
-          tables << as.to_sym
+          refs << as.to_sym
         else
           params.delete(key)
         end
@@ -69,7 +70,7 @@ module DefaultWhere
 
     end
 
-    [params, tables]
+    [refs, tables]
   end
 
 end
