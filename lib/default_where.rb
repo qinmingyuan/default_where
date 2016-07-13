@@ -70,7 +70,7 @@ module DefaultWhere
 
     end
 
-    [refs, tables]
+    [params, refs]
   end
 
 end
