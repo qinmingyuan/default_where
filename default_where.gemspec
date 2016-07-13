@@ -1,6 +1,5 @@
-$:.push File.expand_path("../lib", __FILE__)
-
-require "default_where/version"
+$:.push File.expand_path('../lib', __FILE__)
+require 'default_where/version'
 
 Gem::Specification.new do |s|
   s.name        = "default_where"
