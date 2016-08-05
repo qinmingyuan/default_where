@@ -1,11 +1,13 @@
 require 'default_where/not'
 require 'default_where/range'
+require 'default_where/like'
 require 'default_where/order'
 
 module DefaultWhere
   include DefaultWhere::Not
   include DefaultWhere::Range
   include DefaultWhere::Order
+  include DefaultWhere::Like
 
   def default_where(params = {}, options = {})
     return all if params.empty?
@@ -13,13 +15,11 @@ module DefaultWhere
     params, tables = params_with_table(params, options)
 
     range_params = filter_range(params)
-    params = params.except!(*range_params.keys)
-
     order_params = filter_order(params)
-    params = params.except!(*order_params.keys)
-
     not_params = filter_not(params)
-    equal_params = params.except!(*not_params.keys)
+    like_params = filter_like(params)
+
+    equal_params = params.except!(*range_params.keys, *order_params.keys, *not_params.keys, *like_params.keys)
 
     includes(tables).where(equal_params).references(tables)
       .not_scope(not_params)

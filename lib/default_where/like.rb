@@ -8,7 +8,7 @@ module DefaultWhere
       params.select{ |key, _| key.end_with?('-like') }.each do |k, value|
         real_key = k.sub(/-like$/, '')
         where_string << " AND #{real_key} like :#{k}"
-        where_hash.merge! k.to_sym => value
+        where_hash.merge! k.to_sym => '%' + value.to_s + '%'
       end
 
       where_string.sub!(/^ AND /, '') if where_string.start_with?(' AND ')
