@@ -9,6 +9,9 @@ module DefaultWhere
   include DefaultWhere::Order
   include DefaultWhere::Like
 
+  REJECT = ['', ' ', nil]
+
+
   def default_where(params = {}, options = {})
     return all if params.empty?
 
@@ -29,7 +32,13 @@ module DefaultWhere
   end
 
   def params_with_table(params = {}, options = {})
-    default_reject = options[:reject] || ['', ' ', nil]
+    if options[:reject]
+      default_reject = options[:reject]
+    elsif options[:allow]
+      default_reject = REJECT - options[:allow]
+    else
+      default_reject = REJECT
+    end
 
     # todo secure bug
     if params.respond_to?(:permitted?) && !params.permitted?
