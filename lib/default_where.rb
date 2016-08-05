@@ -23,6 +23,7 @@ module DefaultWhere
 
     includes(tables).where(equal_params).references(tables)
       .not_scope(not_params)
+      .like_scope(like_params)
       .range_scope(range_params)
       .order_scope(order_params)
   end

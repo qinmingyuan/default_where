@@ -5,10 +5,12 @@ module DefaultWhere
       where_string = ''
       where_hash = {}
 
-      params.select{ |key, _| key.end_with?('-like') }.each do |k, value|
-        real_key = k.sub(/-like$/, '')
-        where_string << " AND #{real_key} like :#{k}"
-        where_hash.merge! k.to_sym => '%' + value.to_s + '%'
+      params.select{ |k, _| k.end_with?('-like') }.each do |key, value|
+        real_key = key.sub(/-like$/, '')
+        agent_key = key.gsub(/[-\.]/, '_')
+
+        where_string << " AND #{real_key} like :#{agent_key}"
+        where_hash.merge! agent_key.to_sym => '%' + value.to_s + '%'
       end
 
       where_string.sub!(/^ AND /, '') if where_string.start_with?(' AND ')
