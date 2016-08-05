@@ -46,13 +46,15 @@ module DefaultWhere
     params.to_a.each do |key, _|
 
       if key =~ /\./
-        as, col = key.split('.')
+        table, col = key.split('.')
         f_col, _ = col.split('-')
-        as_model = reflections[as]
+        as_model = reflections[table]
 
         if as_model && as_model.klass.column_names.include?(f_col)
           params["#{as_model.table_name}.#{col}"] = params.delete(key)
-          refs << as.to_sym
+          refs << table.to_sym
+        elsif connection.tables.include? table
+          next
         else
           params.delete(key)
         end
