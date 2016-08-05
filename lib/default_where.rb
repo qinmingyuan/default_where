@@ -8,7 +8,7 @@ module DefaultWhere
   include DefaultWhere::Order
 
   def default_where(params = {}, options = {})
-    return all if params.blank?
+    return all if params.empty?
 
     params, tables = params_with_table(params, options)
 
@@ -28,11 +28,7 @@ module DefaultWhere
   end
 
   def params_with_table(params = {}, options = {})
-    default_reject = ['', ' ', nil]
-
-    if options[:allow_nil]
-      default_reject.delete(nil)
-    end
+    default_reject = options[:reject] || ['', ' ', nil]
 
     # todo secure bug
     if params.respond_to?(:permitted?) && !params.permitted?
