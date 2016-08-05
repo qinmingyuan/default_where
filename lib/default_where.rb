@@ -12,7 +12,7 @@ module DefaultWhere
   def default_where(params = {}, options = {})
     return all if params.empty?
 
-    params, tables = params_with_table(params, options)
+    params, refs, tables = params_with_table(params, options)
 
     range_params = filter_range(params)
     order_params = filter_order(params)
@@ -21,7 +21,7 @@ module DefaultWhere
 
     equal_params = params.except!(*range_params.keys, *order_params.keys, *not_params.keys, *like_params.keys)
 
-    includes(tables).where(equal_params).references(tables)
+    includes(refs).where(equal_params).references(tables)
       .not_scope(not_params)
       .like_scope(like_params)
       .range_scope(range_params)
@@ -41,6 +41,7 @@ module DefaultWhere
     params.reject! { |_, value| default_reject.include?(value) }
 
     refs = []
+    tables = []
 
     # since 1.9 is using lazy iteration
     params.to_a.each do |key, _|
@@ -54,6 +55,7 @@ module DefaultWhere
           params["#{as_model.table_name}.#{col}"] = params.delete(key)
           refs << table.to_sym
         elsif connection.tables.include? table
+          tables << table
           next
         else
           params.delete(key)
@@ -69,7 +71,7 @@ module DefaultWhere
 
     end
 
-    [params, refs]
+    [params, refs, tables]
   end
 
 end
