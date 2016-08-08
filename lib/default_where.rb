@@ -13,7 +13,7 @@ module DefaultWhere
 
 
   def default_where(params = {}, options = {})
-    return all if params.empty?
+    return all if params.blank?
 
     params, refs, tables = params_with_table(params, options)
 
