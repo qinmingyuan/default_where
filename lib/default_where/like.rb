@@ -24,8 +24,8 @@ module DefaultWhere
     end
 
     def filter_like(params)
-      params.select do |k, v|
-        k =~ /o\d/ && v.end_with?('-like')
+      params.select do |k, _|
+        k.end_with?('-like')
       end
     end
 
