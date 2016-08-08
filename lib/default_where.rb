@@ -63,6 +63,7 @@ module DefaultWhere
         if as_model && as_model.klass.column_names.include?(f_col)
           params["#{as_model.table_name}.#{col}"] = params.delete(key)
           refs << table.to_sym
+          tables << as_model.klass.table_name
         elsif connection.tables.include? table
           tables << table
           next
