@@ -66,6 +66,10 @@ module DefaultWhere
           tables << as_model.klass.table_name
         elsif connection.tables.include? table
           tables << table
+          keys = reflections.select { |_, v| v.table_name == table }.keys
+          if keys && keys.size == 1
+            refs << keys.first
+          end
           next
         else
           params.delete(key)
