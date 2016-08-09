@@ -9,7 +9,7 @@ module DefaultWhere
     }
 
     def range_scope(params)
-      where_string = ''
+      where_string = []
       where_hash = {}
 
       PATTERN.each do |char, sign|
@@ -20,13 +20,13 @@ module DefaultWhere
           real_key = key.sub(exp, '')
           agent_key = key.gsub(/[-\.]/, '_')
 
-          where_string << " AND #{real_key} #{sign} :#{agent_key}"
+          where_string << "#{real_key} #{sign} :#{agent_key}"
 
           where_hash.merge! agent_key.to_sym => value
         end
       end
 
-      where_string.sub!(/^ AND /, '') if where_string.start_with?(' AND ')
+      where_string = where_string.join ' AND '
 
       if where_string.present?
         condition = [where_string, where_hash]
