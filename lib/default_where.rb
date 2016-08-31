@@ -51,7 +51,6 @@ module DefaultWhere
 
     refs = []
     tables = []
-
     # since 1.9 is using lazy iteration
     params.to_a.each do |key, _|
 
@@ -64,7 +63,7 @@ module DefaultWhere
           params["#{as_model.table_name}.#{col}"] = params.delete(key)
           refs << table.to_sym
           tables << as_model.klass.table_name
-        elsif connection.tables.include? table
+        elsif connection.data_sources.include? table
           tables << table
           keys = reflections.select { |_, v| v.table_name == table }.keys
           if keys && keys.size == 1
