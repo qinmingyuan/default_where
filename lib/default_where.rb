@@ -35,7 +35,7 @@ module DefaultWhere
     if options[:reject]
       default_reject = options[:reject]
     elsif options[:allow]
-      default_reject = REJECT - options[:allow]
+      default_reject = REJECT - [options[:allow]].flatten
     else
       default_reject = REJECT
     end
