@@ -33,7 +33,7 @@ module DefaultWhere
 
   def params_with_table(params = {}, options = {})
     if options[:reject]
-      default_reject = options[:reject]
+      default_reject = [options[:reject]].flatten
     elsif options[:allow]
       default_reject = REJECT - [options[:allow]].flatten
     else
