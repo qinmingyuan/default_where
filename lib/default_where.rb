@@ -65,7 +65,6 @@ module DefaultWhere
           if keys && keys.size == 1
             refs << keys.first.to_sym
           end
-          next
         end
       else
         f_key, _ = key.split('-')

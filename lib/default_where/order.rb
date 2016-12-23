@@ -5,11 +5,11 @@ module DefaultWhere
       order_array = []
 
       params.select{ |key, _| key.end_with?('-asc') }.each do |k, _|
-        order_array << k.sub(/-asc$/, ' asc')
+        order_array << k.sub(/-asc$/, ' ASC')
       end
 
       params.select{ |key, _| key.end_with?('-desc') }.each do |k, _|
-        order_array << k.sub(/-desc$/, ' desc')
+        order_array << k.sub(/-desc$/, ' DESC')
       end
 
       order(order_array)
@@ -17,7 +17,7 @@ module DefaultWhere
 
     def filter_order(params)
       params.select do |k, v|
-        k =~ /o\d/ && v.end_with?('-asc', '-desc')
+        k.end_with?('-asc', '-desc') && v =~ /^[1-9]$/
       end
     end
 

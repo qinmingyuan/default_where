@@ -63,7 +63,7 @@ User.default_where(params)
 ### Order params
 - Params
 ```ruby
-params = { o1: 'age-asc', o2: 'last_login_at-asc' }
+params = { 'age-asc': '1', 'last_login_at-asc': '2' }
 ```
 - Before use `default_where`
 ```ruby
