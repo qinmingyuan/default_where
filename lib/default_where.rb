@@ -40,34 +40,28 @@ module DefaultWhere
       default_reject = REJECT
     end
 
-    # todo secure bug
-    if params.respond_to?(:permitted?) && !params.permitted?
-      params.permit!
-    end
-
     params = params.to_h
     params.stringify_keys!
     params.reject! { |_, value| default_reject.include?(value) }
 
     refs = []
     tables = []
-    # since 1.9 is using lazy iteration
+    # since ruby 1.9 is using lazy iteration
     params.to_a.each do |key, _|
-
       if key =~ /\./
         table, col = key.split('.')
-        f_col, _ = col.split('-')
         as_model = reflections[table]
+        f_col, _ = col.split('-')
 
         if as_model && as_model.klass.column_names.include?(f_col)
           params["#{as_model.table_name}.#{col}"] = params.delete(key)
           refs << table.to_sym
-          tables << as_model.klass.table_name
+          tables << as_model.table_name
         elsif connection.data_sources.include? table
           tables << table
           keys = reflections.select { |_, v| v.table_name == table }.keys
           if keys && keys.size == 1
-            refs << keys.first
+            refs << keys.first.to_sym
           end
           next
         else
@@ -81,7 +75,6 @@ module DefaultWhere
           params.delete(key)
         end
       end
-
     end
 
     [params, refs, tables]
