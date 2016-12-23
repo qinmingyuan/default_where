@@ -46,38 +46,36 @@ module DefaultWhere
 
     refs = []
     tables = []
-    # since ruby 1.9 is using lazy iteration
-    params.to_a.each do |key, _|
+    final_params = {}
+
+    params.each do |key, _|
       if key =~ /\./
         table, col = key.split('.')
         as_model = reflections[table]
         f_col, _ = col.split('-')
 
         if as_model && as_model.klass.column_names.include?(f_col)
-          params["#{as_model.table_name}.#{col}"] = params.delete(key)
-          refs << table.to_sym
+          final_params["#{as_model.table_name}.#{col}"] = params[key]
           tables << as_model.table_name
+          refs << table.to_sym
         elsif connection.data_sources.include? table
+          final_params["#{table}.#{col}"] = params[key]
           tables << table
           keys = reflections.select { |_, v| v.table_name == table }.keys
           if keys && keys.size == 1
             refs << keys.first.to_sym
           end
           next
-        else
-          params.delete(key)
         end
       else
         f_key, _ = key.split('-')
         if column_names.include?(f_key)
-          params["#{table_name}.#{key}"] = params.delete(key)
-        else
-          params.delete(key)
+          final_params["#{table_name}.#{key}"] = params[key]
         end
       end
     end
 
-    [params, refs, tables]
+    [final_params, refs, tables]
   end
 
 end
