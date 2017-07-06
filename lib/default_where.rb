@@ -61,7 +61,7 @@ module DefaultWhere
         elsif connection.data_sources.include? table
           final_params["#{table}.#{col}"] = params[key]
           tables << table
-          keys = reflections.select { |_, v| v.table_name == table }.keys
+          keys = reflections.select { |_, v| !v.polymorphic? && v.table_name == table }.keys
           if keys && keys.size == 1
             refs << keys.first.to_sym
           end
