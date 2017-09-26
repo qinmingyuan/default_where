@@ -10,7 +10,7 @@ module DefaultWhere
   include DefaultWhere::Like
 
   REJECT = ['', ' ', nil]
-
+  STRIP = true
 
   def default_where(params = {}, options = {})
     return all if params.blank?
@@ -40,6 +40,10 @@ module DefaultWhere
       default_reject = REJECT
     end
 
+    unless options.has_key? :strip
+      options[:strip] = STRIP
+    end
+
     params = params.to_h
     params.stringify_keys!
     params.reject! { |_, value| default_reject.include?(value) }
@@ -48,18 +52,20 @@ module DefaultWhere
     tables = []
     final_params = {}
 
-    params.each do |key, _|
+    params.each do |key, value|
+      value = value.strip if value.is_a?(String) && options[:strip]
+
       if key =~ /\./
         table, col = key.split('.')
         as_model = reflections[table]
         f_col, _ = col.split('-')
 
         if as_model && as_model.klass.column_names.include?(f_col)
-          final_params["#{as_model.table_name}.#{col}"] = params[key]
+          final_params["#{as_model.table_name}.#{col}"] = value
           tables << as_model.table_name
           refs << table.to_sym
         elsif connection.data_sources.include? table
-          final_params["#{table}.#{col}"] = params[key]
+          final_params["#{table}.#{col}"] = value
           tables << table
           keys = reflections.select { |_, v| !v.polymorphic? && v.table_name == table }.keys
           if keys && keys.size == 1
@@ -69,7 +75,7 @@ module DefaultWhere
       else
         f_key, _ = key.split('-')
         if column_names.include?(f_key)
-          final_params["#{table_name}.#{key}"] = params[key]
+          final_params["#{table_name}.#{key}"] = value
         end
       end
     end

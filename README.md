@@ -66,6 +66,13 @@ User.default_where(params)
 User.default_where(params, { allow: [nil] })
 ```
 
+### Auto call strip for string 
+- params
+```ruby
+
+```
+
+
 ### Order params
 - Params
 ```ruby
