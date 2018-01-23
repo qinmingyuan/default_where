@@ -75,7 +75,7 @@ module DefaultWhere
       else
         f_key, _ = key.split('-')
         if column_names.include?(f_key)
-          final_params["#{table_name}.#{key}"] = value
+          final_params["#{key}"] = value
         end
       end
     end
