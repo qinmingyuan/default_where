@@ -18,7 +18,11 @@ module DefaultWhere
         options.each do |key, value|
           exp = Regexp.new(char + '$')
           real_key = key.sub(exp, '')
-          agent_key = key.gsub(/[-\.]/, '_')
+          agent_key = key.gsub(/[-.]/, '_')
+
+          if column_names.include?(real_key)
+            real_key = "#{table_name}.#{real_key}"
+          end
 
           where_string << "#{real_key} #{sign} :#{agent_key}"
 

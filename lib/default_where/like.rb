@@ -7,7 +7,11 @@ module DefaultWhere
 
       params.select{ |k, _| k.end_with?('-like') }.each do |key, value|
         real_key = key.sub(/-like$/, '')
-        agent_key = key.gsub(/[-\.]/, '_')
+        agent_key = key.gsub(/[-.]/, '_')
+
+        if column_names.include?(real_key)
+          real_key = "#{table_name}.#{real_key}"
+        end
 
         where_string << "#{real_key} like :#{agent_key}"
         where_hash.merge! agent_key.to_sym => '%' + value.to_s + '%'

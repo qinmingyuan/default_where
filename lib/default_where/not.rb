@@ -6,7 +6,12 @@ module DefaultWhere
 
       params.each do |key, value|
         real_key = key.sub(/-not$/, '')
-        where_hash.merge! real_key.to_sym => value
+
+        if column_names.include?(real_key)
+          real_key = "#{table_name}.#{real_key}"
+        end
+
+        where_hash.merge! real_key => value
       end
 
       if where_hash.present?
