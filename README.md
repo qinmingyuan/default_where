@@ -67,22 +67,35 @@ User.default_where(params, { allow: [nil] })
 ```
 
 ### Auto call strip for string 
-- params
+* params
 ```ruby
+params= { name: ' dhh ' }
+```
+
+* Before use `default_where`
+```ruby
+User.where(name: params[:name].strip)
+```
+
+* After use `default_where`
+```ruby
+User.default_where(params)
+
 
 ```
+
 
 
 ### Order params
-- Params
+* Params
 ```ruby
 params = { 'age-asc': '1', 'last_login_at-asc': '2' }
 ```
-- Before use `default_where`
+* Before use `default_where`
 ```ruby
 User.order(age: :asc, last_login_at: :asc)
 ```
-- After use `default_where`
+* After use `default_where`
 ```ruby
 User.default_where(params)
 ```
