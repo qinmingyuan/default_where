@@ -1,7 +1,8 @@
 ## DefaultWhere
 
 This Library set default params process for where query in ActiveRecord
-It's a wise decision to use `default_where` with [default_form](https://github.com/qinmingyuan/default_form), replace `ransack`
+
+It's a wise decision to use `default_where` with [default_form](https://github.com/qinmingyuan/default_form) to replace `ransack`
 
 ## Features and Usage
 
