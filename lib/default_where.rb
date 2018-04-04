@@ -9,7 +9,7 @@ module DefaultWhere
   include DefaultWhere::Order
   include DefaultWhere::Like
 
-  REJECT = ['', ' ', nil]
+  REJECT = ['', nil]
   STRIP = true
 
   def default_where(params = {}, options = {})
@@ -32,9 +32,9 @@ module DefaultWhere
   end
 
   def params_with_table(params = {}, options = {})
-    if options[:reject]
+    if options.has_key?(:reject)
       default_reject = [options[:reject]].flatten
-    elsif options[:allow]
+    elsif options.has_key?(:allow)
       default_reject = REJECT - [options[:allow]].flatten
     else
       default_reject = REJECT
