@@ -1,11 +1,12 @@
 module DefaultWhere
   module Like
+    PATTERN = ['-like', '-rl', '-ll']
 
     def like_scope(params)
       where_string = []
       where_hash = {}
 
-      params.select{ |k, _| k.end_with?('-like') }.each do |key, value|
+      params.select{ |k, _| k.end_with?(*PATTERN) }.each do |key, value|
         real_key = key.sub(/-like$/, '')
         agent_key = key.gsub(/[-.]/, '_')
 
@@ -14,7 +15,16 @@ module DefaultWhere
         end
 
         where_string << "#{real_key} like :#{agent_key}"
-        where_hash.merge! agent_key.to_sym => '%' + value.to_s + '%'
+
+        if key.end_with?('-ll')
+          like_value = value.to_s + '%'
+        elsif key.end_with?('-rl')
+          like_value = '%' + value.to_s
+        else
+          like_value = '%' + value.to_s + '%'
+        end
+
+        where_hash.merge! agent_key.to_sym => like_value
       end
 
       where_string = where_string.join ' AND '
@@ -29,7 +39,7 @@ module DefaultWhere
 
     def filter_like(params)
       params.select do |k, _|
-        k.end_with?('-like')
+        k.end_with?(*PATTERN)
       end
     end
 
