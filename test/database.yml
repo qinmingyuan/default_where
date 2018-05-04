@@ -5,7 +5,7 @@ sqlite:
 mysql:
   adapter: mysql2
   username: root
-  password:
+  password: root
   database: default_where
 
 postgresql:
