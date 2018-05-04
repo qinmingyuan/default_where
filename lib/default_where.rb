@@ -19,7 +19,6 @@ module DefaultWhere
 
     params = params.to_h
     params.stringify_keys!
-
     params, refs, tables = params_with_table(params, options)
 
     or_params = filter_or(params)
