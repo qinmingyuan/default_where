@@ -2,12 +2,14 @@ require 'default_where/not'
 require 'default_where/range'
 require 'default_where/like'
 require 'default_where/order'
+require 'default_where/or'
 
 module DefaultWhere
   include DefaultWhere::Not
   include DefaultWhere::Range
   include DefaultWhere::Order
   include DefaultWhere::Like
+  include DefualtWhere::Or
 
   REJECT = ['', nil]
   STRIP = true
@@ -15,8 +17,12 @@ module DefaultWhere
   def default_where(params = {}, options = {})
     return all if params.blank?
 
+    params = params.to_h
+    params.stringify_keys!
+
     params, refs, tables = params_with_table(params, options)
 
+    or_params = filter_or(params)
     range_params = filter_range(params)
     order_params = filter_order(params)
     not_params = filter_not(params)
@@ -44,43 +50,52 @@ module DefaultWhere
       options[:strip] = STRIP
     end
 
-    params = params.to_h
-    params.stringify_keys!
-    params.reject! { |_, value| default_reject.include?(value) }
-
     refs = []
     tables = []
     final_params = {}
 
     params.each do |key, value|
       value = value.strip if value.is_a?(String) && options[:strip]
+      next if default_reject.include?(value)
 
-      if key =~ /\./
-        table, col = key.split('.')
-        as_model = reflections[table]
-        f_col, _ = col.split('-')
-
-        if as_model && as_model.klass.column_names.include?(f_col)
-          final_params["#{as_model.table_name}.#{col}"] = value
-          tables << as_model.table_name
-          refs << table.to_sym
-        elsif connection.data_sources.include? table
-          final_params["#{table}.#{col}"] = value
-          tables << table
-          keys = reflections.select { |_, v| !v.polymorphic? && v.table_name == table }.keys
-          if keys && keys.size == 1
-            refs << keys.first.to_sym
-          end
-        end
-      else
-        f_key, _ = key.split('-')
-        if column_names.include?(f_key)
-          final_params["#{key}"] = value
-        end
-      end
+      _ref, _table, _params = key_with_table(key, value)
+      refs << _ref
+      tables << _table
+      final_params.merge! _params
     end
 
     [final_params, refs, tables]
+  end
+
+  def key_with_table(key, value)
+    final_params = {}
+    _ref = nil
+    _table = nil
+    if key =~ /\./
+      _table, _column = key.split('.')
+      _real_column = _column.split('-').first
+      _ref = reflections[_table]
+      if _ref && _ref.klass.column_names.include?(_real_column)
+        _real_table = _ref.table_name
+      elsif connection.data_sources.include?(_table) && connection.column_exists?(_table, _real_column)
+        _real_table = _table
+        keys = reflections.select { |_, v| !v.polymorphic? && v.table_name == _table }.keys
+        if keys && keys.size == 1
+          _ref = keys.first.to_sym
+        else
+          raise 'please use reflection name!'
+        end
+      else
+        return []
+      end
+      final_params["#{_real_table}.#{_real_column}"] = value
+    else
+      _real_column = key.split('-').first
+      return [] unless column_names.include?(_real_column)
+      final_params["#{key}"] = value
+    end
+
+    [_ref, _table, final_params]
   end
 
 end
