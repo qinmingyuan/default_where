@@ -9,7 +9,7 @@ module DefaultWhere
   include DefaultWhere::Range
   include DefaultWhere::Order
   include DefaultWhere::Like
-  include DefualtWhere::Or
+  #include DefaultWhere::Or
 
   REJECT = ['', nil]
   STRIP = true
@@ -18,10 +18,9 @@ module DefaultWhere
     return all if params.blank?
 
     params = params.to_h
-    params.stringify_keys!
     params, refs, tables = params_with_table(params, options)
 
-    or_params = filter_or(params)
+    #or_params = filter_or(params)
     range_params = filter_range(params)
     order_params = filter_order(params)
     not_params = filter_not(params)
@@ -56,30 +55,31 @@ module DefaultWhere
     params.each do |key, value|
       value = value.strip if value.is_a?(String) && options[:strip]
       next if default_reject.include?(value)
+      key = key.to_s
 
       if key =~ /\./
         _table, _column = key.split('.')
         _real_column = _column.split('-').first
         _ref = reflections[_table]
         if _ref && _ref.klass.column_names.include?(_real_column)
-          _real_table = _ref.table_name
+          _table = _ref.table_name
         elsif connection.data_sources.include?(_table) && connection.column_exists?(_table, _real_column)
-          _real_table = _table
           keys = reflections.select { |_, v| !v.polymorphic? && v.table_name == _table }.keys
           if keys && keys.size == 1
             _ref = keys.first.to_sym
           else
-            raise 'please use reflection name!'
+            raise "#{key} is confused, please use reflection name!"
           end
-        else
-          return
         end
-        final_params["#{_real_table}.#{_real_column}"] = value
+        refs << _ref
+        tables << _table
       else
         _real_column = key.split('-').first
-        return [] unless column_names.include?(_real_column)
-        final_params["#{key}"] = value
+        next unless column_names.include?(_real_column)
+        _table = table_name
+        _column = key
       end
+      final_params["#{_table}.#{_column}"] = value
     end
 
     [final_params, refs, tables]

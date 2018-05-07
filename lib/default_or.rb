@@ -15,4 +15,6 @@ module DefaultWhere::DefaultOr
 
 end
 
-ActiveRecord::Base.extend TheRole::Owner
+ActiveSupport.on_load :active_record do
+  extend DefaultWhere::DefaultOr
+end
