@@ -71,8 +71,8 @@ module DefaultWhere
             raise "#{key} is confused, please use reflection name!"
           end
         end
-        refs << _ref
-        tables << _table
+        refs << _ref unless refs.include?(_ref)
+        tables << _table unless tables.include?(_table)
       else
         _real_column = key.split('-').first
         next unless column_names.include?(_real_column)
