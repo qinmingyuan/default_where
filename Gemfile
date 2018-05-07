@@ -3,3 +3,4 @@ gemspec
 
 gem 'rdoc'
 
+gem 'mysql2'

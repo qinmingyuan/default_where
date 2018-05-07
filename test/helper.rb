@@ -12,7 +12,7 @@ end
 require "active_record"
 require "minitest/autorun"
 
-db_config = YAML.load_file(File.expand_path("../database.yml", __FILE__)).fetch(ENV["DB"] || "sqlite")
+db_config = YAML.load_file(File.expand_path('database.yml', __dir__)).fetch(ENV["DB"] || "mysql")
 ActiveRecord::Base.establish_connection(db_config)
 ActiveRecord::Schema.verbose = false
 

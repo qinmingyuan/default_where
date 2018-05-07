@@ -66,6 +66,14 @@ User.default_where(params)
 User.default_where(params, { allow: [nil] })
 ```
 
+### OR
+```ruby
+params = {
+  'users.email-not-or-name': 'dhh'
+}
+
+```
+
 ### Auto call strip for string 
 * params
 ```ruby
