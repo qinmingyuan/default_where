@@ -28,15 +28,12 @@ end
 
 task default: :test
 
-require 'active_record'
-
 task :environment do
-  ActiveRecord::Tasks::DatabaseTasks.database_configuration = YAML.load_file('config/database.yml')
+  ActiveRecord::Tasks::DatabaseTasks.database_configuration = YAML.load_file('test/config/database.yml')
   ActiveRecord::Tasks::DatabaseTasks.env = 'development'
   ActiveRecord::Tasks::DatabaseTasks.root = __dir__
   ActiveRecord::Tasks::DatabaseTasks.migrations_paths = [ 'test/migrations' ]
   ActiveRecord::Base.configurations = ActiveRecord::Tasks::DatabaseTasks.database_configuration
-  ActiveRecord::Base.establish_connection :development
 end
 
 load 'active_record/railties/databases.rake'
