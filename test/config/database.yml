@@ -8,8 +8,25 @@ default: &default
 
 development:
   <<: *default
-  database: employees_development
+  database: default_where_development
 
 test:
   <<: *default
-  database: employee_test
+  database: default_where_test
+
+sqlite:
+  adapter: sqlite3
+  database: "file:memdb1?mode=memory&cache=shared"
+
+mysql:
+  adapter: mysql2
+  username: root
+  password: root
+  database: default_where
+
+postgresql:
+  adapter: postgresql
+  username: postgres
+  password:
+  database: default_where
+  min_messages: ERROR

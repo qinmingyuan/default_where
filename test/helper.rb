@@ -3,7 +3,7 @@
 require 'rubygems'
 require 'bundler/setup'
 begin
-  Bundler.setup(:default, :development)
+  Bundler.setup(:default, :test, :development)
 rescue Bundler::BundlerError => e
   $stderr.puts e.message
   $stderr.puts "Run `bundle install` to install missing gems"
@@ -11,10 +11,17 @@ rescue Bundler::BundlerError => e
 end
 require 'active_record'
 require 'minitest/autorun'
+require 'factory_bot'
 
-db_config = YAML.load_file(File.expand_path('database.yml', __dir__)).fetch(ENV['DB'] || 'mysql')
-ActiveRecord::Base.establish_connection(db_config)
 ActiveRecord::Schema.verbose = false
+ActiveRecord::Tasks::DatabaseTasks.database_configuration = YAML.load_file('test/config/database.yml')
+ActiveRecord::Base.configurations = ActiveRecord::Tasks::DatabaseTasks.database_configuration
+ActiveRecord::Base.establish_connection :test
+
+if defined?(FactoryBot)
+  FactoryBot.definition_file_paths << File.expand_path('test/factories', __dir__)
+  FactoryBot.find_definitions
+end
 
 class ActiveSupport::TestCase
   include FactoryBot::Syntax::Methods
@@ -23,6 +30,7 @@ end
 def teardown_db
   tables = ActiveRecord::Base.connection.data_sources
   tables.each do |table|
-    ActiveRecord::Base.connection.drop_table(table)
+    ActiveRecord::Base.connection.truncate(table)
   end
 end
+teardown_db

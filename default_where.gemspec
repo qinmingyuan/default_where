@@ -17,4 +17,5 @@ Gem::Specification.new do |s|
   s.add_runtime_dependency 'activerecord', '>= 4.0'
   s.add_development_dependency 'rdoc', '~> 0'
   s.add_development_dependency 'rake', '~> 0'
+  s.add_development_dependency 'factory_bot_rails'
 end
