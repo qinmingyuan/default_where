@@ -64,22 +64,23 @@ module DefaultWhere
         if _ref && _ref.klass.column_names.include?(_real_column)
           _table = _ref.table_name
         elsif connection.data_sources.include?(_table) && connection.column_exists?(_table, _real_column)
-          keys = reflections.select { |_, v| !v.polymorphic? && v.table_name == _table }.keys
-          if keys && keys.size == 1
-            _ref = keys.first.to_sym
+          _refs = reflections.select { |_, v| v.table_name == _table && !v.polymorphic? }
+          if _refs.size == 1
+            _ref = _refs.first
           else
-            raise "#{key} is confused, please use reflection name!"
+            raise "#{key} makes confused, please use reflection name!"
           end
+        else
+          next
         end
-        refs << _ref unless refs.include?(_ref)
+        refs << _ref.name unless refs.include?(_ref.name)
         tables << _table unless tables.include?(_table)
+        final_params["#{_table}.#{_column}"] = value
       else
         _real_column = key.split('-').first
         next unless column_names.include?(_real_column)
-        _table = table_name
-        _column = key
+        final_params[key] = value
       end
-      final_params["#{_table}.#{_column}"] = value
     end
 
     [final_params, refs, tables]
