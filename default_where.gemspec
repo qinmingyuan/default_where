@@ -9,13 +9,18 @@ Gem::Specification.new do |s|
   s.homepage = 'https://github.com/qinmingyuan/default_where'
   s.summary = 'default process params for where'
   s.description = 'Description of QueryScope.'
-  s.license = 'MIT'
+  s.license = 'LGPL-3.0'
 
-  s.files = Dir['{app,config,db,lib}/**/*', 'MIT-LICENSE', 'Rakefile', 'README.md']
+  s.files = Dir[
+    '{app,config,db,lib}/**/*',
+    'MIT-LICENSE',
+    'Rakefile',
+    'README.md'
+  ]
   s.test_files = Dir['test/**/*']
 
-  s.add_runtime_dependency 'activerecord', '>= 4.0'
+  s.add_runtime_dependency 'activerecord', '>= 4.0', '<= 6.0'
   s.add_development_dependency 'rdoc', '~> 0'
   s.add_development_dependency 'rake', '~> 0'
-  s.add_development_dependency 'factory_bot_rails'
+  s.add_development_dependency 'factory_bot_rails', '~> 0'
 end
