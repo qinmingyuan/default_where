@@ -4,12 +4,8 @@ module DefaultWhere
     def order_scope(params)
       order_array = []
 
-      params.select{ |key, _| key.end_with?('-asc') }.each do |k, _|
-        order_array << k.sub(/-asc$/, ' ASC')
-      end
-
-      params.select{ |key, _| key.end_with?('-desc') }.each do |k, _|
-        order_array << k.sub(/-desc$/, ' DESC')
+      params.sort_by{ |_, v| v.to_i }.each do |i|
+        order_array << i[0].sub(/(-asc|-desc)$/, '-asc' => ' ASC', '-desc' => ' DESC')
       end
 
       order(order_array)
@@ -17,7 +13,7 @@ module DefaultWhere
 
     def filter_order(params)
       params.select do |k, v|
-        k.end_with?('-asc', '-desc') && v =~ /^[1-9]$/
+        k.end_with?('-asc', '-desc') && String(v) =~ /^[1-9]$/
       end
     end
 

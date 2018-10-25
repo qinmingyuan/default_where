@@ -12,22 +12,19 @@ module DefaultWhere
       where_string = []
       where_hash = {}
 
-      PATTERN.each do |char, sign|
-        options = params.select{ |key, _| key.end_with?(char) }
+      params.each do |key, value|
+        exp = /-(gt|gte|lt|lte)$/
+        real_key = key.sub(exp, '')
+        sign_str = key.match(exp).to_s
+        agent_key = key.gsub(/[-.]/, '_')
 
-        options.each do |key, value|
-          exp = Regexp.new(char + '$')
-          real_key = key.sub(exp, '')
-          agent_key = key.gsub(/[-.]/, '_')
-
-          if column_names.include?(real_key)
-            real_key = "#{table_name}.#{real_key}"
-          end
-
-          where_string << "#{real_key} #{sign} :#{agent_key}"
-
-          where_hash.merge! agent_key.to_sym => value
+        if column_names.include?(real_key)
+          real_key = "#{table_name}.#{real_key}"
         end
+
+        where_string << "#{real_key} #{PATTERN[sign_str]} :#{agent_key}"
+
+        where_hash.merge! agent_key.to_sym => value
       end
 
       where_string = where_string.join ' AND '
