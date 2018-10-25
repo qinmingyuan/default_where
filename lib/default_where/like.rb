@@ -6,7 +6,7 @@ module DefaultWhere
       where_string = []
       where_hash = {}
 
-      params.select{ |k, _| k.end_with?(*PATTERN) }.each do |key, value|
+      params.each do |key, value|
         real_key = key.sub(/-like$/, '')
         agent_key = key.gsub(/[-.]/, '_')
 
