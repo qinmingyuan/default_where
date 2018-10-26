@@ -7,7 +7,7 @@ module DefaultWhere
       where_hash = {}
 
       params.each do |key, value|
-        real_key = key.sub(/-like$/, '')
+        real_key = key.sub(/-(like|rl|ll)$/, '')
         agent_key = key.gsub(/[-.]/, '_')
 
         if column_names.include?(real_key)
