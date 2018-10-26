@@ -17,11 +17,11 @@ module DefaultWhere
         where_string << "#{real_key} like :#{agent_key}"
 
         if key.end_with?('-ll')
-          like_value = value.to_s + '%'
+          like_value = "#{value}%"
         elsif key.end_with?('-rl')
-          like_value = '%' + value.to_s
+          like_value = "%#{value}"
         else
-          like_value = '%' + value.to_s + '%'
+          like_value = "%#{value}%"
         end
 
         where_hash.merge! agent_key.to_sym => like_value

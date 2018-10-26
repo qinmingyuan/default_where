@@ -5,7 +5,7 @@ module DefaultWhere
       order_array = []
 
       params.sort_by{ |_, v| v.to_i }.each do |i|
-        order_array << i[0].sub(/(-asc|-desc)$/, '-asc' => ' ASC', '-desc' => ' DESC')
+        order_array << i[0].sub(/-(asc|desc)$/, '-asc' => ' ASC', '-desc' => ' DESC')
       end
 
       order(order_array)
