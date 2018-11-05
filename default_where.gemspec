@@ -20,7 +20,7 @@ Gem::Specification.new do |s|
   s.test_files = Dir['test/**/*']
 
   s.add_runtime_dependency 'activerecord', '>= 4.0', '<= 6.0'
-  s.add_development_dependency 'rdoc', '~> 0'
-  s.add_development_dependency 'rake', '~> 0'
-  s.add_development_dependency 'factory_bot_rails', '~> 0'
+  s.add_development_dependency 'sdoc', '~> 1.0'
+  s.add_development_dependency 'rake', '~> 12.3'
+  s.add_development_dependency 'factory_bot_rails', '~> 4.11'
 end
