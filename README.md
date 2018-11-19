@@ -14,6 +14,8 @@ It's a wise decision to use `default_where` with [default_form](https://github.c
 * 范围：key-gte: value, 
 * 排序：key-asc: 1, key-desc: 2
 * 排除：key-not: value
+#### 对于postgresql 数据库
+* 包含任一值：key-any: value
 
 ### Normal equal params
 
