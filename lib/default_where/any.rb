@@ -1,3 +1,4 @@
+# for postgresql array search
 module DefaultWhere
   module Any
 
