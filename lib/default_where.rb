@@ -3,12 +3,14 @@ require 'default_where/range'
 require 'default_where/like'
 require 'default_where/order'
 require 'default_where/or'
+require 'default_where/any'
 
 module DefaultWhere
   include DefaultWhere::Not
   include DefaultWhere::Range
   include DefaultWhere::Order
   include DefaultWhere::Like
+  include DefaultWhere::Any
   #include DefaultWhere::Or
 
   REJECT = ['', nil]
@@ -25,14 +27,16 @@ module DefaultWhere
     order_params = filter_order(params)
     not_params = filter_not(params)
     like_params = filter_like(params)
+    any_params = filter_any(params)
 
-    equal_params = params.except!(*range_params.keys, *order_params.keys, *not_params.keys, *like_params.keys)
+    equal_params = params.except!(*range_params.keys, *order_params.keys, *not_params.keys, *like_params.keys, *any_params.keys)
 
     includes(refs).where(equal_params).references(tables)
       .not_scope(not_params)
       .like_scope(like_params)
       .range_scope(range_params)
       .order_scope(order_params)
+      .any_scope(any_params)
   end
 
   def params_with_table(params = {}, options = {})
