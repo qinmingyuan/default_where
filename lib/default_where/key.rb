@@ -1,9 +1,9 @@
 # for i18n jsonb support search
 module DefaultWhere
-  module I18n
+  module Key
     PATTERN = ['-en', '-zh']
 
-    def i18n_scope(params)
+    def key_scope(params)
       where_string = []
       where_hash = {}
 
@@ -29,7 +29,7 @@ module DefaultWhere
       end
     end
 
-    def filter_i18n(params)
+    def filter_key(params)
       params.select do |k, _|
         k.end_with?(*PATTERN)
       end

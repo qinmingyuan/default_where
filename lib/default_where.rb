@@ -4,7 +4,7 @@ require_relative 'default_where/like'
 require_relative 'default_where/order'
 require_relative 'default_where/or'
 require_relative 'default_where/any'
-require_relative 'default_where/i18n'
+require_relative 'default_where/key'
 
 module DefaultWhere
   include DefaultWhere::Not
@@ -12,7 +12,7 @@ module DefaultWhere
   include DefaultWhere::Order
   include DefaultWhere::Like
   include DefaultWhere::Any
-  include DefaultWhere::I18n
+  include DefaultWhere::Key
   #include DefaultWhere::Or
 
   REJECT = ['', nil]
@@ -30,9 +30,9 @@ module DefaultWhere
     not_params = filter_not(params)
     like_params = filter_like(params)
     any_params = filter_any(params)
-    i18n_params = filter_i18n(params)
+    key_params = filter_key(params)
 
-    equal_params = params.except!(*range_params.keys, *order_params.keys, *not_params.keys, *like_params.keys, *any_params.keys, *i18n_params.keys)
+    equal_params = params.except!(*range_params.keys, *order_params.keys, *not_params.keys, *like_params.keys, *any_params.keys, *key_params.keys)
 
     includes(refs).where(equal_params).references(tables)
       .not_scope(not_params)
@@ -40,7 +40,7 @@ module DefaultWhere
       .range_scope(range_params)
       .order_scope(order_params)
       .any_scope(any_params)
-      .i18n_scope(i18n_params)
+      .key_scope(key_params)
   end
 
   def params_with_table(params = {}, options = {})
