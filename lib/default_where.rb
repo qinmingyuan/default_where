@@ -32,7 +32,14 @@ module DefaultWhere
     any_params = filter_any(params)
     key_params = filter_key(params)
 
-    equal_params = params.except!(*range_params.keys, *order_params.keys, *not_params.keys, *like_params.keys, *any_params.keys, *key_params.keys)
+    equal_params = params.except!(
+      *range_params.keys,
+      *order_params.keys,
+      *not_params.keys,
+      *like_params.keys,
+      *any_params.keys,
+      *key_params.keys
+    )
 
     includes(refs).where(equal_params).references(tables)
       .not_scope(not_params)
@@ -87,7 +94,7 @@ module DefaultWhere
       else
         _real_column = key.split('-').first
         next unless column_names.include?(_real_column)
-        final_params[key] = value
+        final_params["#{table_name}.#{key}"] = value
       end
     end
 

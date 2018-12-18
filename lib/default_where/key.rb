@@ -12,10 +12,7 @@ module DefaultWhere
         real_key = key.sub(/-(en|zh)$/, '')
         agent_key = key.gsub(/[-.]/, '_')
 
-        next unless column_names.include?(real_key)
-
         where_string << "#{real_key}->>'#{i18n_key}' = :#{agent_key}"
-
         where_hash.merge! agent_key.to_sym => value
       end
 

@@ -10,10 +10,6 @@ module DefaultWhere
         real_key = key.sub(/-(like|rl|ll)$/, '')
         agent_key = key.gsub(/[-.]/, '_')
 
-        if column_names.include?(real_key)
-          real_key = "#{table_name}.#{real_key}"
-        end
-
         where_string << "#{real_key} like :#{agent_key}"
 
         if key.end_with?('-ll')
