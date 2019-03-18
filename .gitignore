@@ -10,3 +10,4 @@ test/dummy/.sass-cache
 test/config/database.yml
 
 *.gem
+Gemfile.lock
