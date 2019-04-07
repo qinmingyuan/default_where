@@ -68,7 +68,7 @@ module DefaultWhere
         allow = [options.fetch(key, {}).fetch(:allow, [])].flatten
         reject = REJECT - allow
       end
-      next if Array(reject).include?(value)
+      next if reject.include?(value)
 
       # unify key to string
       key = key.to_s
