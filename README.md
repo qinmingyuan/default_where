@@ -74,7 +74,7 @@ users = users.where(age: params[:age]) if params[:age]
 User.default_where(params)
 
 # also can control which blank value can use
-User.default_where(params, { allow: [nil] })
+User.default_where(params, { xx: { allow: nil }})
 ```
 
 ### OR
