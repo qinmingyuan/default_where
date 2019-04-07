@@ -51,25 +51,26 @@ module DefaultWhere
   end
 
   def params_with_table(params = {}, options = {})
-    if options.has_key?(:reject)
-      default_reject = Array(options[:reject])
-    elsif options.has_key?(:allow)
-      default_reject = REJECT - Array(options[:allow])
-    else
-      default_reject = REJECT
-    end
-
-    unless options.has_key? :strip
-      options[:strip] = STRIP
-    end
-
     refs = []
     tables = []
     final_params = {}
 
     params.each do |key, value|
-      value = value.strip if value.is_a?(String) && options[:strip]
-      next if default_reject.include?(value)
+      # strip
+      strip = options.fetch(key, {}).fetch(:strip, STRIP)
+      value = value.strip if value.is_a?(String) && strip
+
+      # reject
+      options_reject = [options.fetch(key, {}).fetch(:reject, [])].flatten
+      if options_reject.present?
+         reject = options_reject
+      else
+        allow = [options.fetch(key, {}).fetch(:allow, [])].flatten
+        reject = REJECT - allow
+      end
+      next if Array(reject).include?(value)
+
+      # unify key to string
       key = key.to_s
 
       if key =~ /\./
