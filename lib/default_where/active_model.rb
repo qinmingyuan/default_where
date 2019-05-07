@@ -3,7 +3,7 @@ module DefaultWhere
   
     def human_attribute_name(attribute, options = {})
       if attribute.to_s.end_with?('-like')
-      
+        attribute = attribute.to_s.sub('-like', '')
       end
       super
     end
