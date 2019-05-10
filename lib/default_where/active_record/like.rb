@@ -1,7 +1,9 @@
+# frozen_string_literal: true
+
 module DefaultWhere
   module ActiveRecord
     module Like
-      PATTERN = ['-like', '-rl', '-ll']
+      PATTERN = ['-like', '-rl', '-ll'].freeze
   
       def like_scope(params)
         where_string = []

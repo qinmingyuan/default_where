@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # for postgresql array search
 module DefaultWhere
   module Postgresql

@@ -1,6 +1,8 @@
+# frozen_string_literal: true
+
 module DefaultWhere
   module ActiveRecord
-  module Not
+    module Not
 
       def not_scope(params)
         where_hash = {}

@@ -1,8 +1,10 @@
+# frozen_string_literal: true
+
 # for i18n jsonb support search
 module DefaultWhere
   module Postgresql
     module Key
-      PATTERN = ['-en', '-zh']
+      PATTERN = ['-en', '-zh'].freeze
   
       def key_scope(params)
         where_string = []

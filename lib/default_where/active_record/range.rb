@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module DefaultWhere
   module ActiveRecord
     module Range
@@ -6,7 +8,7 @@ module DefaultWhere
         '-gte' => '>=',
         '-lt' => '<',
         '-lte' => '<='
-      }
+      }.freeze
   
       def range_scope(params)
         where_string = []

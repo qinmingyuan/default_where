@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require_relative 'active_record/not'
 require_relative 'active_record/range'
 require_relative 'active_record/like'
@@ -16,7 +18,7 @@ module DefaultWhere
     include Postgresql::Key
     #include Or
   
-    REJECT = ['', nil]
+    REJECT = ['', nil].freeze
     STRIP = true
   
     def default_where(params = {}, options = {})
