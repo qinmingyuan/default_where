@@ -96,7 +96,7 @@ module DefaultWhere
           tables << _table unless tables.include?(_table)
           final_params["#{_table}.#{_column}"] = value
         else
-          _real_column = key.split('-').first
+          _real_column = key.split(/[-\/]/).first
           next unless column_names.include?(_real_column)
           final_params["#{table_name}.#{key}"] = value
         end
