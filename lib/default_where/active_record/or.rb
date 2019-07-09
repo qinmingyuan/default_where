@@ -2,22 +2,25 @@
 
 module DefaultWhere
   module Or
-
+    
+    # '-or-'
     def or_scope(params)
-      where_hash = {}
+      or_hash = {}
 
       params.each do |key, value|
-        real_key = key.split('-or-')
+        real_keys = key.split('-or-')
+        
+        real_keys.each do |real_key|
+          if column_names.include?(real_key)
+            real_key = "#{table_name}.#{real_key}"
+          end
 
-        if column_names.include?(real_key)
-          real_key = "#{table_name}.#{real_key}"
+          where_hash.merge! real_key => value
         end
-
-        where_hash.merge! real_key => value
       end
 
       if where_hash.present?
-        where.or(where(where_hash))
+        where.or(where(or_hash))
       else
         current_scope
       end
