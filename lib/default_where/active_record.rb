@@ -44,13 +44,14 @@ module DefaultWhere
         *key_params.keys
       )
   
-      includes(refs).where(equal_params).references(tables)
+      includes(refs).where(equal_params)
         .not_scope(not_params)
         .like_scope(like_params)
         .range_scope(range_params)
         .order_scope(order_params)
         .any_scope(any_params)
         .key_scope(key_params)
+        .references(tables)
     end
   
     def params_with_table(params = {}, options = {})

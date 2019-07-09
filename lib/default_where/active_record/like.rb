@@ -32,7 +32,7 @@ module DefaultWhere
           condition = [where_string, where_hash]
           where(condition)
         else
-          all
+          current_scope
         end
       end
   

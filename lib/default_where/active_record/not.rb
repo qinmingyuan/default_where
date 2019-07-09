@@ -20,7 +20,7 @@ module DefaultWhere
         if where_hash.present?
           where.not(where_hash)
         else
-          all
+          current_scope
         end
       end
   
