@@ -116,6 +116,12 @@ User.order(age: :asc, last_login_at: :asc)
 User.default_where(params)
 ```
 
+## For Postgresql
+* support JSONB filter，just use like this: `column_name/json_key`, just notice jsonb all value is string type;
+```ruby
+Order.default_where('extra/maintain_id': self.id.to_s)
+```
+
 ## A sample with all params above
 * Params
 ```ruby
