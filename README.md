@@ -99,7 +99,7 @@ User.where(name: params[:name].strip)
 User.default_where(params)
 
 # also can control whether use strip
-User.default_where(params, { strip: false })
+User.default_where(params, name: { strip: false })
 ```
 
 ### Order params
@@ -119,7 +119,10 @@ User.default_where(params)
 ## For Postgresql
 * support JSONB filter，just use like this: `column_name/json_key`, just notice jsonb all value is string type;
 ```ruby
-Order.default_where('extra/maintain_id': self.id.to_s)
+# before
+Order.where("extra->>'maintain_id' = :key", key: id.to_s) 
+# after
+Order.default_where('extra/maintain_id': id.to_s)
 ```
 
 ## A sample with all params above
