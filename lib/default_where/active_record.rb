@@ -77,6 +77,11 @@ module DefaultWhere
           end
         else
           allow = options.fetch(:allow, {}).fetch(key, [])
+          if allow == nil
+            allow = [nil]
+          else
+            allow = Array(allow)
+          end
           reject = REJECT - allow
         end
         next if reject.include?(value)
