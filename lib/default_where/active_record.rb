@@ -21,11 +21,11 @@ module DefaultWhere
     REJECT = ['', nil].freeze
     STRIP = true
   
-    def default_where(params = {}, options = {})
+    def default_where(params = {})
       return all if params.blank?
   
       params = params.to_h
-      params, refs, tables = params_with_table(params, options)
+      params, refs, tables = params_with_table(params)
   
       #or_params = filter_or(params)
       range_params = filter_range(params)
@@ -54,22 +54,29 @@ module DefaultWhere
         .references(tables)
     end
   
-    def params_with_table(params = {}, options = {})
+    def params_with_table(params = {})
       refs = []
       tables = []
       final_params = {}
+      options = params.extract!(:strip, :allow, :reject)
   
       params.each do |key, value|
         # strip
-        strip = options.fetch(key, {}).fetch(:strip, STRIP)
+        strip = options.fetch(:strip, {}).fetch(key, STRIP)
         value = value.strip if value.is_a?(String) && strip
   
         # reject
-        options_reject = [options.fetch(key, {}).fetch(:reject, [])].flatten
-        if options_reject.present?
-           reject = options_reject
+        if options.key?(:reject)
+          reject = options.fetch(:reject, {}).fetch(key, REJECT)
+          if reject == nil
+            reject = [nil]
+          elsif reject == []
+            reject = [[]]
+          else
+            reject = Array(reject)
+          end
         else
-          allow = [options.fetch(key, {}).fetch(:allow, [])].flatten
+          allow = options.fetch(:allow, {}).fetch(key, [])
           reject = REJECT - allow
         end
         next if reject.include?(value)
