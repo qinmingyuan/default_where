@@ -21,12 +21,17 @@ module DefaultWhere
   STRIP = true
 
   def default_where(params = {})
+    or_params = params.delete(:or)
+    
+    default_where_without_or(params).default_where_with_or(or_params)
+  end
+
+  def default_where_without_or(params = {})
     return all if params.blank?
 
     params = params.to_h
     params, refs, tables = params_with_table(params)
 
-    or_params = default_where_filter_or(params)
     range_params = default_where_filter_range(params)
     order_params = default_where_filter_order(params)
     not_params = default_where_filter_not(params)
@@ -52,13 +57,19 @@ module DefaultWhere
       .default_where_key_scope(key_params)
       .default_where_references(tables)
   end
+  
+  def default_where_with_or(params = {})
+    return all if params.blank?
+    params, refs, tables = params_with_table(params)
+    
+  end
 
   def params_with_table(params = {})
     refs = []
     tables = []
     final_params = {}
     options = {}
-    [:strip, :allow, :reject, :or].each do |key|
+    [:strip, :allow, :reject].each do |key|
       options[key] = params.delete(key) if params[key].respond_to?(:to_hash)
     end
 

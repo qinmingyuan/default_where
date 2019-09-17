@@ -128,7 +128,18 @@ Order.default_where('extra/maintain_id': id.to_s)
 ## A sample with all params above
 * Params
 ```ruby
-{ name: 'dhh', 'role.id': 2, 'age-lte': 2, 'age-asc': '1', 'last_login_at-asc': '2' }
+{ 
+  name: 'dhh',
+  'role.id': 2, 
+  'age-lte': 2, 
+  'age-asc': '1', 
+  'last_login_at-asc': '2',
+  or: {
+    name: 'dhh',
+    email: 'dhh'
+  },
+  allow: { name: nil }
+}
 ```
 * Before use `default_where`
 ```ruby
