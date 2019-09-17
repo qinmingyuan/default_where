@@ -26,25 +26,25 @@ module DefaultWhere
     params = params.to_h
     params, refs, tables = params_with_table(params)
 
-    order_params = default_where_filter_order(params)
+    order_params = dw_order(params)
 
     or_params = params.delete(:or)
 
     includes(refs)
-      .default_where_and(params)
-      .default_where_or(or_params)
-      .default_where_order_scope(order_params)
+      .dw_and(params)
+      .dw_or(or_params)
+      .dw_order_scope(order_params)
       .references(tables)
   end
 
   def default_where_and(params = {})
     return current_scope if params.blank?
     
-    range_params = default_where_filter_range(params)
-    not_params = default_where_filter_not(params)
-    like_params = default_where_filter_like(params)
-    any_params = default_where_filter_any(params)
-    key_params = default_where_filter_key(params)
+    range_params = dw_range_filter(params)
+    not_params = dw_not_filter(params)
+    like_params = dw_like_filter(params)
+    any_params = dw_any_filter(params)
+    key_params = dw_key_filter(params)
 
     equal_params = params.except!(
       *range_params.keys,
@@ -56,22 +56,22 @@ module DefaultWhere
     )
 
     where(equal_params)
-      .default_where_not_scope(not_params)
-      .default_where_like_scope(like_params)
-      .default_where_range_scope(range_params)
-      .default_where_any_scope(any_params)
-      .default_where_key_scope(key_params)
+      .dw_not_scope(not_params)
+      .dw_like_scope(like_params)
+      .dw_range_scope(range_params)
+      .dw_any_scope(any_params)
+      .dw_key_scope(key_params)
       
   end
   
   def default_where_or(params = {})
     return current_scope if params.blank?
 
-    range_params = default_where_filter_range(params)
-    not_params = default_where_filter_not(params)
-    like_params = default_where_filter_like(params)
-    any_params = default_where_filter_any(params)
-    key_params = default_where_filter_key(params)
+    range_params = dw_range_filter(params)
+    not_params = dw_not_filter(params)
+    like_params = dw_like_filter(params)
+    any_params = dw_any_filter(params)
+    key_params = dw_key_filter(params)
 
     equal_params = params.except!(
       *range_params.keys,
@@ -82,11 +82,11 @@ module DefaultWhere
     )
 
     where(equal_params)
-      .default_where_not_scope(not_params)
-      .default_where_like_scope(like_params)
-      .default_where_range_scope(range_params)
-      .default_where_any_scope(any_params)
-      .default_where_key_scope(key_params)
+      .dw_not_scope(not_params)
+      .dw_like_scope(like_params)
+      .dw_range_scope(range_params)
+      .dw_any_scope(any_params)
+      .dw_key_scope(key_params)
   end
 
   def params_with_table(params = {})
