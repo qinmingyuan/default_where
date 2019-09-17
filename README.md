@@ -138,3 +138,5 @@ User.includes(:role).where(name: params[:name], 'roles.id': params[:'role.id']).
 ```ruby
 User.default_where(params)
 ```
+
+## 注意
