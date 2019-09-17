@@ -26,13 +26,13 @@ module DefaultWhere
     params = params.to_h
     params, refs, tables = params_with_table(params)
 
-    order_params = dw_order(params)
+    order_params = dw_order_filter(params)
 
     or_params = params.delete(:or)
 
     includes(refs)
-      .dw_and(params)
-      .dw_or(or_params)
+      .default_where_and(params)
+      .default_where_or(or_params)
       .dw_order_scope(order_params)
       .references(tables)
   end
