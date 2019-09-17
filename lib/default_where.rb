@@ -27,7 +27,8 @@ module DefaultWhere
     params, refs, tables = params_with_table(params)
 
     order_params = dw_order_filter(params)
-
+    params.except!(*order_params.keys)
+    
     or_params = params.delete(:or)
 
     includes(refs)
@@ -48,7 +49,6 @@ module DefaultWhere
 
     equal_params = params.except!(
       *range_params.keys,
-      *order_params.keys,
       *not_params.keys,
       *like_params.keys,
       *any_params.keys,
@@ -81,12 +81,12 @@ module DefaultWhere
       *key_params.keys
     )
 
-    where(equal_params)
-      .dw_not_scope(not_params)
-      .dw_like_scope(like_params)
-      .dw_range_scope(range_params)
-      .dw_any_scope(any_params)
-      .dw_key_scope(key_params)
+    where(equal_params, operator: 'OR')
+      .dw_not_scope(not_params, operator: 'OR')
+      .dw_like_scope(like_params, operator: 'OR')
+      .dw_range_scope(range_params, operator: 'OR')
+      .dw_any_scope(any_params, operator: 'OR')
+      .dw_key_scope(key_params, operator: 'OR')
   end
 
   def params_with_table(params = {})
