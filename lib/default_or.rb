@@ -1,7 +1,7 @@
 module DefaultWhere::DefaultOr
 
-  def default_or(hash)
-    return all if hash.blank?
+  def default_or(params = {})
+    return all if params.blank?
 
     keys = hash.keys
     query = where(keys[0] => hash[keys[0]])

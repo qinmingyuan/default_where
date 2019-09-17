@@ -20,10 +20,6 @@ module DefaultWhere
           sign_str = key.match(exp).to_s
           agent_key = key.gsub(/[-.]/, '_')
   
-          if column_names.include?(real_key)
-            real_key = "#{table_name}.#{real_key}"
-          end
-  
           where_string << "#{real_key} #{PATTERN[sign_str]} :#{agent_key}"
   
           where_hash.merge! agent_key.to_sym => value
