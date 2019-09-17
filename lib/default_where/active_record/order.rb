@@ -4,7 +4,7 @@ module DefaultWhere
   module ActiveRecord
     module Order
 
-      def default_where_order_scope(params)
+      def dw_order_scope(params)
         order_array = []
   
         params.sort_by{ |_, v| v.to_i }.each do |i|
@@ -14,7 +14,7 @@ module DefaultWhere
         order(order_array)
       end
   
-      def default_where_filter_order(params)
+      def dw_order_filter(params)
         params.select do |k, v|
           k.end_with?('-asc', '-desc') && String(v) =~ /^[1-9]$/
         end

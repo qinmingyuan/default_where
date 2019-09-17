@@ -10,7 +10,7 @@ module DefaultWhere
         '-lte' => '<='
       }.freeze
   
-      def default_where_range_scope(params)
+      def dw_range_scope(params, operator: 'AND')
         where_string = []
         where_hash = {}
   
@@ -25,7 +25,7 @@ module DefaultWhere
           where_hash.merge! agent_key.to_sym => value
         end
   
-        where_string = where_string.join ' AND '
+        where_string = where_string.join " #{operator} "
   
         if where_string.present?
           condition = [where_string, where_hash]
@@ -35,7 +35,7 @@ module DefaultWhere
         end
       end
   
-      def default_where_filter_range(params)
+      def dw_range_filter(params)
         params.select do |k, _|
           k.end_with?(*PATTERN.keys)
         end

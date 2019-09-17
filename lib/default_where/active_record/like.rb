@@ -5,7 +5,7 @@ module DefaultWhere
     module Like
       PATTERN = ['-like', '-rl', '-ll'].freeze
   
-      def default_where_like_scope(params)
+      def dw_like_scope(params, operator: 'AND')
         where_string = []
         where_hash = {}
   
@@ -26,7 +26,7 @@ module DefaultWhere
           where_hash.merge! agent_key.to_sym => like_value
         end
   
-        where_string = where_string.join ' AND '
+        where_string = where_string.join " #{operator} "
   
         if where_string.present?
           condition = [where_string, where_hash]
@@ -36,7 +36,7 @@ module DefaultWhere
         end
       end
   
-      def default_where_filter_like(params)
+      def dw_like_filter(params)
         params.select do |k, _|
           k.end_with?(*PATTERN)
         end

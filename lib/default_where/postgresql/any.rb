@@ -5,7 +5,7 @@ module DefaultWhere
   module Postgresql
     module Any
   
-      def default_where_any_scope(params)
+      def dw_any_scope(params, operator: 'AND')
         where_string = []
         where_hash = {}
   
@@ -17,7 +17,7 @@ module DefaultWhere
           where_hash.merge! agent_key.to_sym => value
         end
   
-        where_string = where_string.join ' AND '
+        where_string = where_string.join " #{operator} "
   
         if where_string.present?
           condition = [where_string, where_hash]
@@ -27,7 +27,7 @@ module DefaultWhere
         end
       end
   
-      def default_where_filter_any(params)
+      def dw_any_filter(params)
         params.select do |k, _|
           k.end_with?('-any')
         end
