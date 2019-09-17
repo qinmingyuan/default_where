@@ -6,7 +6,7 @@ module DefaultWhere
     
     #
     #
-    def default_or(params = {})
+    def default_where_default_or(params = {})
       return all if params.blank?
     
       keys = hash.keys
@@ -19,7 +19,7 @@ module DefaultWhere
       query
     end
     
-    def or_scope(params)
+    def default_where_or_scope(params)
       or_hash = {}
 
       params.each do |key, value|
@@ -41,7 +41,7 @@ module DefaultWhere
       end
     end
 
-    def filter_or(params)
+    def default_where_filter_or(params)
       params.select do |k, _|
         k.include?('-or-')
       end

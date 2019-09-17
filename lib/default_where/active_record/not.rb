@@ -4,7 +4,7 @@ module DefaultWhere
   module ActiveRecord
     module Not
 
-      def not_scope(params)
+      def default_where_not_scope(params)
         where_hash = {}
   
         params.each do |key, value|
@@ -20,7 +20,7 @@ module DefaultWhere
         end
       end
   
-      def filter_not(params)
+      def default_where_filter_not(params)
         params.select do |k, _|
           k.end_with?('-not')
         end

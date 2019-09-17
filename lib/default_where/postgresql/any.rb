@@ -5,7 +5,7 @@ module DefaultWhere
   module Postgresql
     module Any
   
-      def any_scope(params)
+      def default_where_any_scope(params)
         where_string = []
         where_hash = {}
   
@@ -27,7 +27,7 @@ module DefaultWhere
         end
       end
   
-      def filter_any(params)
+      def default_where_filter_any(params)
         params.select do |k, _|
           k.end_with?('-any')
         end

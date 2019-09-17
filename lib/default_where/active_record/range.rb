@@ -10,7 +10,7 @@ module DefaultWhere
         '-lte' => '<='
       }.freeze
   
-      def range_scope(params)
+      def default_where_range_scope(params)
         where_string = []
         where_hash = {}
   
@@ -35,7 +35,7 @@ module DefaultWhere
         end
       end
   
-      def filter_range(params)
+      def default_where_filter_range(params)
         params.select do |k, _|
           k.end_with?(*PATTERN.keys)
         end

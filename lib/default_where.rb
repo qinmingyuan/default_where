@@ -26,13 +26,13 @@ module DefaultWhere
     params = params.to_h
     params, refs, tables = params_with_table(params)
 
-    or_params = filter_or(params)
-    range_params = filter_range(params)
-    order_params = filter_order(params)
-    not_params = filter_not(params)
-    like_params = filter_like(params)
-    any_params = filter_any(params)
-    key_params = filter_key(params)
+    or_params = default_where_filter_or(params)
+    range_params = default_where_filter_range(params)
+    order_params = default_where_filter_order(params)
+    not_params = default_where_filter_not(params)
+    like_params = default_where_filter_like(params)
+    any_params = default_where_filter_any(params)
+    key_params = default_where_filter_key(params)
 
     equal_params = params.except!(
       *range_params.keys,
@@ -44,13 +44,13 @@ module DefaultWhere
     )
 
     includes(refs).where(equal_params)
-      .not_scope(not_params)
-      .like_scope(like_params)
-      .range_scope(range_params)
-      .order_scope(order_params)
-      .any_scope(any_params)
-      .key_scope(key_params)
-      .references(tables)
+      .default_where_not_scope(not_params)
+      .default_where_like_scope(like_params)
+      .default_where_range_scope(range_params)
+      .default_where_order_scope(order_params)
+      .default_where_any_scope(any_params)
+      .default_where_key_scope(key_params)
+      .default_where_references(tables)
   end
 
   def params_with_table(params = {})

@@ -5,7 +5,7 @@ module DefaultWhere
   module Postgresql
     module Key
   
-      def key_scope(params)
+      def default_where_key_scope(params)
         where_string = []
         where_hash = {}
   
@@ -27,7 +27,7 @@ module DefaultWhere
         end
       end
   
-      def filter_key(params)
+      def default_where_filter_key(params)
         params.select do |k, _|
           k.match? /.\/./
         end

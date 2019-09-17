@@ -5,7 +5,7 @@ module DefaultWhere
     module Like
       PATTERN = ['-like', '-rl', '-ll'].freeze
   
-      def like_scope(params)
+      def default_where_like_scope(params)
         where_string = []
         where_hash = {}
   
@@ -36,7 +36,7 @@ module DefaultWhere
         end
       end
   
-      def filter_like(params)
+      def default_where_filter_like(params)
         params.select do |k, _|
           k.end_with?(*PATTERN)
         end
