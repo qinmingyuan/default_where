@@ -3,7 +3,21 @@
 module DefaultWhere
   module Or
     
-    # '-or-'
+    #
+    #
+    def default_or(params = {})
+      return all if params.blank?
+    
+      keys = hash.keys
+      query = where(keys[0] => hash[keys[0]])
+    
+      keys[1..-1].each do |key|
+        query = query.or(where(key => hash[key]))
+      end
+    
+      query
+    end
+    
     def or_scope(params)
       or_hash = {}
 
