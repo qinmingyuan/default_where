@@ -1,7 +1,8 @@
 # frozen_string_literal: true
 
 module DefaultWhere
-  module Or
+  module ActiveRecord
+    module Or
     
     #
     #
@@ -45,7 +46,8 @@ module DefaultWhere
         k.include?('-or-')
       end
     end
-
+    
+    end
   end
 end
 
