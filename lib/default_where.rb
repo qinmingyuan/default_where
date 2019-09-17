@@ -24,15 +24,18 @@ module DefaultWhere
     return all if params.blank?
     
     params = params.to_h
-    params, refs, tables = params_with_table(params)
-
+    or_params = params.delete(:or)
     order_params = dw_order_filter(params)
     params.except!(*order_params.keys)
-    
-    or_params = params.delete(:or)
 
+    and_params, and_refs, and_tables = params_with_table(params)
+    or_params, or_refs, or_tables = params_with_table(or_params)
+
+    refs = and_refs + or_refs
+    tables = and_tables + or_tables
+    
     includes(refs)
-      .default_where_and(params)
+      .default_where_and(and_params)
       .default_where_or(or_params)
       .dw_order_scope(order_params)
       .references(tables)
