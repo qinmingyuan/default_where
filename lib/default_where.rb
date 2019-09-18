@@ -39,7 +39,7 @@ module DefaultWhere
     return current_scope if params.blank?
     
     equal_params = {}
-    params.each do |key, value|
+    params.each do |key, _|
       equal_params[key] = params.delete(key) unless key.match? /[-\/]/
     end
     where_string, where_hash = default_where_scope(params)
