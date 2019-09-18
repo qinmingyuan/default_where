@@ -16,14 +16,16 @@ module DefaultWhere
         where_hash = {}
   
         params.each do |key, value|
-          raise "#{key}'s value dot support nil" if value.nil?
-          
           exp = /-(gt|gte|lt|lte|not)$/
           real_key = key.sub(exp, '')
           sign_str = key.match(exp).to_s
           agent_key = key.gsub(/[-.]/, '_')
-  
-          where_string << "#{real_key} #{PATTERN[sign_str]} :#{agent_key}"
+          
+          if value.nil? && key.end_with?('-not')
+            where_string << "#{real_key} IS NOT NULL"
+          else
+            where_string << "#{real_key} #{PATTERN[sign_str]} :#{agent_key}"
+          end
   
           where_hash.merge! agent_key.to_sym => value
         end
