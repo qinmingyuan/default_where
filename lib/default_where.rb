@@ -20,15 +20,14 @@ module DefaultWhere
     [:strip, :allow, :reject].each do |key|
       options[key] = params.delete(key) if params[key].respond_to?(:to_hash)
     end
-    or_params = params.delete(:or) { |_| {} }
+    or_params = {}
+    or_params = params.delete(:or) if params[:or].respond_to?(:to_hash)
     
     and_params, and_refs, and_tables = default_where_params(params, options)
-    
     order_params = default_where_order_filter(and_params)
     and_params.except!(*order_params.keys)
 
     or_params, or_refs, or_tables = default_where_params(or_params, options)
-
     refs = and_refs + or_refs
     tables = and_tables + or_tables
     
