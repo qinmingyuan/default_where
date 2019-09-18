@@ -1,17 +1,13 @@
 # frozen_string_literal: true
 
-require_relative 'default_where/active_record/range'
-require_relative 'default_where/active_record/like'
-require_relative 'default_where/active_record/order'
-require_relative 'default_where/active_record/or'
+require_relative 'default_where/active_record'
+require_relative 'default_where/order'
 require_relative 'default_where/postgresql/any'
 require_relative 'default_where/postgresql/key'
 
 module DefaultWhere
-  include ActiveRecord::Range
-  include ActiveRecord::Order
-  include ActiveRecord::Like
-  include ActiveRecord::Or
+  include ActiveRecord
+  include Order
   include Postgresql::Any
   include Postgresql::Key
 
@@ -38,43 +34,25 @@ module DefaultWhere
     refs = and_refs + or_refs
     tables = and_tables + or_tables
     
-    includes(refs).default_where_and(and_params).default_where_or(or_params).dw_order_scope(order_params).references(tables)
+    includes(refs).default_where_and(and_params).default_where_or(or_params).default_where_order(order_params).references(tables)
   end
 
   def default_where_and(params = {})
     return current_scope if params.blank?
-    
-    range_params = dw_range_filter(params)
-    like_params = dw_like_filter(params)
-    any_params = dw_any_filter(params)
-    key_params = dw_key_filter(params)
 
-    equal_params = params.except!(
-      *range_params.keys,
-      *like_params.keys,
-      *any_params.keys,
-      *key_params.keys
-    )
+    where_string, where_hash = default_where_scope(params)
+    where_string = where_string.join ' AND '
 
-    where(equal_params).dw_range_scope(range_params).dw_any_scope(any_params).dw_key_scope(key_params).dw_like_scope(like_params)
+    where(where_string, where_hash)
   end
   
   def default_where_or(params = {})
     return current_scope if params.blank?
 
-    range_params = dw_range_filter(params)
-    like_params = dw_like_filter(params)
-    any_params = dw_any_filter(params)
-    key_params = dw_key_filter(params)
-
-    equal_params = params.except!(
-      *range_params.keys,
-      *like_params.keys,
-      *any_params.keys,
-      *key_params.keys
-    )
-
-    dw_or_scope(equal_params).dw_range_scope(range_params, operator: 'OR').dw_any_scope(any_params, operator: 'OR').dw_key_scope(key_params, operator: 'OR').dw_like_scope(like_params, operator: 'OR')
+    where_string, where_hash = default_where_scope(params)
+    where_string = where_string.join ' OR '
+    
+    where(where_string, where_hash)
   end
 
   def params_with_table(params = {}, options = {})

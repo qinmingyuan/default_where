@@ -11,10 +11,10 @@ module DefaultWhere
       like: 'like',
       rl: 'like',
       ll: 'like',
-      nil => '='
+      '': '='
     }.freeze
     
-    def dw_scope(params)
+    def default_where_scope(params)
       where_string = []
       where_hash = {}
 
@@ -42,7 +42,7 @@ module DefaultWhere
             real_value = value
           end
           
-          where_string << "#{real_key} #{PATTERN[sign_str.to_sym]} :#{agent_key}"
+          where_string << "#{real_key} #{PATTERN[sign_str.to_s.to_sym]} :#{agent_key}"
           where_hash.merge! agent_key.to_sym => real_value
         end
       end
