@@ -3,7 +3,6 @@
 require_relative 'default_where/active_record/range'
 require_relative 'default_where/active_record/like'
 require_relative 'default_where/active_record/order'
-require_relative 'default_where/active_record/or'
 require_relative 'default_where/postgresql/any'
 require_relative 'default_where/postgresql/key'
 
@@ -11,7 +10,6 @@ module DefaultWhere
   include ActiveRecord::Range
   include ActiveRecord::Order
   include ActiveRecord::Like
-  include ActiveRecord::Or
   include Postgresql::Any
   include Postgresql::Key
 
