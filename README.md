@@ -73,14 +73,25 @@ users = users.where(age: params[:age]) if params[:age]
 ```ruby
 User.default_where(params)
 
-# also can control which blank value can use
-User.default_where(params, { xx: { allow: nil }})
+```
+
+### allow
+you can control which blank value can use
+
+```ruby
+{
+  name: nil,
+  allow: { name: nil }
+}
 ```
 
 ### OR
 ```ruby
 params = {
-  'users.email-not-or-name': 'dhh'
+  or: { 
+    'users.email-not': 'qin',
+    'name': 'qin'
+  }
 }
 
 ```
