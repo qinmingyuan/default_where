@@ -24,11 +24,12 @@ module DefaultWhere
     return all if params.blank?
     
     params = params.to_h
-    or_params = params.delete(:or)
-    order_params = dw_order_filter(params)
-    params.except!(*order_params.keys)
-
+    or_params = params.delete(:or) { |_| {} }
     and_params, and_refs, and_tables = params_with_table(params)
+    
+    order_params = dw_order_filter(and_params)
+    and_params.except!(*order_params.keys)
+
     or_params, or_refs, or_tables = params_with_table(or_params)
 
     refs = and_refs + or_refs
@@ -132,7 +133,7 @@ module DefaultWhere
       real_column = column.split(/[-\/]/)[0]
       
       if items.size == 1
-        next unless column_names.include?(real_name)
+        next unless column_names.include?(real_column)
         table = table_name
       else
         prefix = items[0]
@@ -141,7 +142,7 @@ module DefaultWhere
         # 检查 prefix 是否为关联关系的名称
         if ref && !ref.polymorphic?
           table = ref.table_name
-        # 检查 prefix 是否为表名，且表中存在 real_name 字段
+        # 检查 prefix 是否为表名，且表中存在 real_column 字段
         elsif connection.data_sources.include?(prefix) && connection.column_exists?(prefix, real_column)
           possible_refs = reflections.select { |_, v| v.table_name == prefix }
           if possible_refs.size < 1
@@ -164,9 +165,12 @@ module DefaultWhere
         if ref && !refs.include?(ref.name)
           refs << ref.name
         end
+
+        unless tables.include?(table)
+          tables << table
+        end
       end
       
-      tables << table unless tables.include?(table)
       final_params["#{table}.#{column}"] = value
     end
 
