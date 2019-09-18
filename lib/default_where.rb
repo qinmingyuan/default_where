@@ -22,13 +22,18 @@ module DefaultWhere
     return all if params.blank?
     
     params = params.to_h
+    options = {}
+    [:strip, :allow, :reject].each do |key|
+      options[key] = params.delete(key) if params[key].respond_to?(:to_hash)
+    end
     or_params = params.delete(:or) { |_| {} }
-    and_params, and_refs, and_tables = params_with_table(params)
+    
+    and_params, and_refs, and_tables = params_with_table(params, options)
     
     order_params = dw_order_filter(and_params)
     and_params.except!(*order_params.keys)
 
-    or_params, or_refs, or_tables = params_with_table(or_params)
+    or_params, or_refs, or_tables = params_with_table(or_params, options)
 
     refs = and_refs + or_refs
     tables = and_tables + or_tables
@@ -85,14 +90,10 @@ module DefaultWhere
       .dw_key_scope(key_params, operator: 'OR')
   end
 
-  def params_with_table(params = {})
+  def params_with_table(params = {}, options = {})
     refs = []
     tables = []
     final_params = {}
-    options = {}
-    [:strip, :allow, :reject].each do |key|
-      options[key] = params.delete(key) if params[key].respond_to?(:to_hash)
-    end
 
     params.each do |key, value|
       # strip, if assign key to false, will not works
