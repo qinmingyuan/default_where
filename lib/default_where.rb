@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 
-require_relative 'default_where/active_record/not'
 require_relative 'default_where/active_record/range'
 require_relative 'default_where/active_record/like'
 require_relative 'default_where/active_record/order'
@@ -9,7 +8,6 @@ require_relative 'default_where/postgresql/any'
 require_relative 'default_where/postgresql/key'
 
 module DefaultWhere
-  include ActiveRecord::Not
   include ActiveRecord::Range
   include ActiveRecord::Order
   include ActiveRecord::Like
@@ -46,21 +44,18 @@ module DefaultWhere
     return current_scope if params.blank?
     
     range_params = dw_range_filter(params)
-    not_params = dw_not_filter(params)
     like_params = dw_like_filter(params)
     any_params = dw_any_filter(params)
     key_params = dw_key_filter(params)
 
     equal_params = params.except!(
       *range_params.keys,
-      *not_params.keys,
       *like_params.keys,
       *any_params.keys,
       *key_params.keys
     )
 
     where(equal_params)
-      .dw_not_scope(not_params)
       .dw_like_scope(like_params)
       .dw_range_scope(range_params)
       .dw_any_scope(any_params)
@@ -72,21 +67,18 @@ module DefaultWhere
     return current_scope if params.blank?
 
     range_params = dw_range_filter(params)
-    not_params = dw_not_filter(params)
     like_params = dw_like_filter(params)
     any_params = dw_any_filter(params)
     key_params = dw_key_filter(params)
 
     equal_params = params.except!(
       *range_params.keys,
-      *not_params.keys,
       *like_params.keys,
       *any_params.keys,
       *key_params.keys
     )
 
     where(equal_params, operator: 'OR')
-      .dw_not_scope(not_params, operator: 'OR')
       .dw_like_scope(like_params, operator: 'OR')
       .dw_range_scope(range_params, operator: 'OR')
       .dw_any_scope(any_params, operator: 'OR')
@@ -175,6 +167,10 @@ module DefaultWhere
     end
 
     [final_params, refs, tables]
+  end
+  
+  def logger
+    ActiveRecord::Base.logger
   end
 
 end

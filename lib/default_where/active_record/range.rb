@@ -7,15 +7,18 @@ module DefaultWhere
         '-gt' => '>',
         '-gte' => '>=',
         '-lt' => '<',
-        '-lte' => '<='
+        '-lte' => '<=',
+        '-not' => '!='
       }.freeze
-  
+      
       def dw_range_scope(params, operator: 'AND')
         where_string = []
         where_hash = {}
   
         params.each do |key, value|
-          exp = /-(gt|gte|lt|lte)$/
+          raise "#{key}'s value dot support nil" if value.nil?
+          
+          exp = /-(gt|gte|lt|lte|not)$/
           real_key = key.sub(exp, '')
           sign_str = key.match(exp).to_s
           agent_key = key.gsub(/[-.]/, '_')

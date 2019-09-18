@@ -40,12 +40,6 @@ module DefaultWhere
         current_scope
       end
     end
-
-    def default_where_filter_or(params)
-      params.select do |k, _|
-        k.include?('-or-')
-      end
-    end
     
     end
   end
