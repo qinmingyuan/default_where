@@ -110,7 +110,13 @@ User.where(name: params[:name].strip)
 User.default_where(params)
 
 # also can control whether use strip
-User.default_where(params, name: { strip: false })
+
+{
+  name: ' qin',
+  strip: { 
+    name: false
+  }
+}
 ```
 
 ### Order params
