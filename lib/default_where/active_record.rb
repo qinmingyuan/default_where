@@ -20,7 +20,7 @@ module DefaultWhere
 
       params.each do |key, value|
         real_key, sign_str = key.split('-')
-        agent_key = key.gsub(/[-.]/, '_')
+        agent_key = key.gsub(/[-.\/]/, '_')
         
         if value.nil?
           if sign_str == 'not'
@@ -30,6 +30,13 @@ module DefaultWhere
           else
             raise "#{key}'s value can not be nil"
           end
+        elsif sign_str == 'any'
+          where_string << ":#{agent_key} = ANY(#{real_key})"
+          where_hash.merge! agent_key.to_sym => value
+        elsif real_key.match? /.\/./
+          real_key, i18n_key = key.split('/')
+          where_string << "#{real_key}->>'#{i18n_key}' = :#{agent_key}"
+          where_hash.merge! agent_key.to_sym => value
         else
           case sign_str
           when 'll'
