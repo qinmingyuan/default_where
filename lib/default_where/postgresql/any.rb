@@ -5,7 +5,7 @@ module DefaultWhere
   module Postgresql
     module Any
   
-      def dw_any_scope(params, operator: 'AND')
+      def dw_any_scope(params)
         where_string = []
         where_hash = {}
   
@@ -16,15 +16,8 @@ module DefaultWhere
           where_string << ":#{agent_key} = ANY(#{real_key})"
           where_hash.merge! agent_key.to_sym => value
         end
-  
-        where_string = where_string.join " #{operator} "
-  
-        if where_string.present?
-          condition = [where_string, where_hash]
-          where(condition)
-        else
-          all
-        end
+        
+        [where_string, where_hash]
       end
   
       def dw_any_filter(params)
