@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module DefaultWhere
-  module ActiveRecord
+  module Params
   
     def default_where_params(params = {}, options = {})
       refs = []

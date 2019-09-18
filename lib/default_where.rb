@@ -24,7 +24,7 @@ module DefaultWhere
     
     and_params, and_refs, and_tables = default_where_params(params, options)
     
-    order_params = dw_order_filter(and_params)
+    order_params = default_where_order_filter(and_params)
     and_params.except!(*order_params.keys)
 
     or_params, or_refs, or_tables = default_where_params(or_params, options)
@@ -37,11 +37,15 @@ module DefaultWhere
 
   def default_where_and(params = {})
     return current_scope if params.blank?
-
+    
+    equal_params = {}
+    params.each do |key, value|
+      equal_params[key] = params.delete(key) unless key.match? /[-\/]/
+    end
     where_string, where_hash = default_where_scope(params)
     where_string = where_string.join ' AND '
 
-    where(where_string, where_hash)
+    where(equal_params).where(where_string, where_hash)
   end
   
   def default_where_or(params = {})
