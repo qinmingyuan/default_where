@@ -25,9 +25,8 @@ module DefaultWhere
             where_string << "#{real_key} IS NOT NULL"
           else
             where_string << "#{real_key} #{PATTERN[sign_str]} :#{agent_key}"
+            where_hash.merge! agent_key.to_sym => value
           end
-  
-          where_hash.merge! agent_key.to_sym => value
         end
   
         where_string = where_string.join " #{operator} "

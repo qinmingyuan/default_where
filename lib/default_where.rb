@@ -38,11 +38,7 @@ module DefaultWhere
     refs = and_refs + or_refs
     tables = and_tables + or_tables
     
-    includes(refs)
-      .default_where_and(and_params)
-      .default_where_or(or_params)
-      .dw_order_scope(order_params)
-      .references(tables)
+    includes(refs).default_where_and(and_params).default_where_or(or_params).dw_order_scope(order_params).references(tables)
   end
 
   def default_where_and(params = {})
@@ -60,12 +56,7 @@ module DefaultWhere
       *key_params.keys
     )
 
-    where(equal_params)
-      .dw_like_scope(like_params)
-      .dw_range_scope(range_params)
-      .dw_any_scope(any_params)
-      .dw_key_scope(key_params)
-      
+    where(equal_params).dw_range_scope(range_params).dw_any_scope(any_params).dw_key_scope(key_params).dw_like_scope(like_params)
   end
   
   def default_where_or(params = {})
@@ -83,11 +74,7 @@ module DefaultWhere
       *key_params.keys
     )
 
-    where(equal_params, operator: 'OR')
-      .dw_like_scope(like_params, operator: 'OR')
-      .dw_range_scope(range_params, operator: 'OR')
-      .dw_any_scope(any_params, operator: 'OR')
-      .dw_key_scope(key_params, operator: 'OR')
+    dw_or_scope(equal_params).dw_range_scope(range_params, operator: 'OR').dw_any_scope(any_params, operator: 'OR').dw_key_scope(key_params, operator: 'OR').dw_like_scope(like_params, operator: 'OR')
   end
 
   def params_with_table(params = {}, options = {})

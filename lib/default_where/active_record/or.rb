@@ -4,38 +4,26 @@ module DefaultWhere
   module ActiveRecord
     module Or
     
-    #
-    #
-    def default_where_default_or(params = {})
-      return all if params.blank?
-    
-      keys = hash.keys
-      query = where(keys[0] => hash[keys[0]])
-    
-      keys[1..-1].each do |key|
-        query = query.or(where(key => hash[key]))
-      end
-    
-      query
-    end
-    
-    def default_where_or_scope(params)
-      or_hash = {}
+    def dw_or_scope(params)
+      where_string = []
+      where_hash = {}
 
       params.each do |key, value|
-        real_keys = key.split('-or-')
-        
-        real_keys.each do |real_key|
-          if column_names.include?(real_key)
-            real_key = "#{table_name}.#{real_key}"
-          end
-
-          where_hash.merge! real_key => value
+        agent_key = key.gsub(/[-.]/, '_')
+  
+        if value.nil?
+          where_string << "#{key} IS NULL"
+        else
+          where_string << "#{key} = :#{agent_key}"
+          where_hash.merge! agent_key.to_sym => value
         end
       end
 
-      if where_hash.present?
-        where.or(where(or_hash))
+      where_string = where_string.join " OR "
+
+      if where_string.present?
+        condition = [where_string, where_hash]
+        where(condition)
       else
         current_scope
       end
