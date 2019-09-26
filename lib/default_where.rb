@@ -1,13 +1,15 @@
 # frozen_string_literal: true
 
-require_relative 'default_where/active_record'
-require_relative 'default_where/order'
-require_relative 'default_where/params'
+require 'default_where/active_record'
+require 'default_where/order'
+require 'default_where/params'
+require 'default_where/group'
 
 module DefaultWhere
   include ActiveRecord
   include Order
   include Params
+  include Group
 
   REJECT = ['', nil].freeze
   STRIP = true
