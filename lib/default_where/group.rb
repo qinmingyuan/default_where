@@ -12,14 +12,15 @@ module DefaultWhere
     # }
     #  group: 'date(created_at)',
     def default_group(*group, select:)
-      if select.is_a?(String)
-        select = Array(select)
-      elsif select.respond_to?(:to_hash)
-        select = select.map do |k, v|
+      if select.respond_to?(:to_hash)
+        selected = select.map do |k, v|
           "#{v} AS #{k}"
         end
+      else
+        selected = Array(select)
       end
-      unscoped.select(*group, *select).group(*group)
+      
+      unscoped.select(*selected, *group).group(*select.values)
     end
     
   end
