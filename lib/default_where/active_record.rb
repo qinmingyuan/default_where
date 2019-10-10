@@ -22,7 +22,7 @@ module DefaultWhere
         real_key, sign_str = key.split('-')
         agent_key = key.gsub(/[-.\/]/, '_')
         
-        if value.nil?
+        if value.nil? || value == []
           if sign_str == 'not'
             where_string << "#{real_key} IS NOT NULL"
           elsif sign_str.nil?
