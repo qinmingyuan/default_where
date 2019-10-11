@@ -8,9 +8,9 @@ module DefaultWhere
       lt: '<',
       lte: '<=',
       not: '!=',
-      like: 'like',
-      rl: 'like',
-      ll: 'like',
+      like: 'LIKE',
+      rl: 'LIKE',
+      ll: 'LIKE',
       '': '='
     }.freeze
     
