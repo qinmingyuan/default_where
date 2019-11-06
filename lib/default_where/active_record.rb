@@ -11,7 +11,7 @@ module DefaultWhere
       like: 'LIKE',
       rl: 'LIKE',
       ll: 'LIKE',
-      '': '='
+      :'' => '='
     }.freeze
     
     def default_where_scope(params)
