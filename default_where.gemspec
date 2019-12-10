@@ -1,4 +1,4 @@
-$:.push File.expand_path('../lib', __FILE__)
+$:.push File.expand_path('lib', __dir__)
 require 'default_where/version'
 
 Gem::Specification.new do |s|
@@ -8,7 +8,7 @@ Gem::Specification.new do |s|
   s.email = ['mingyuan0715@foxmail.com']
   s.homepage = 'https://github.com/qinmingyuan/default_where'
   s.summary = 'default process params for where'
-  s.description = 'Description of QueryScope.'
+  s.description = 'Description of'
   s.license = 'LGPL-3.0'
 
   s.files = Dir[
