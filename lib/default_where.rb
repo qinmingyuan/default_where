@@ -1,12 +1,12 @@
 # frozen_string_literal: true
 
-require 'default_where/active_record'
+require 'default_where/scope'
 require 'default_where/order'
 require 'default_where/params'
 require 'default_where/group'
 
 module DefaultWhere
-  include ActiveRecord
+  include Scope
   include Order
   include Params
   include Group

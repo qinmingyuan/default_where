@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module DefaultWhere
-  module ActiveRecord
+  module Scope
     PATTERN = {
       gt: '>',
       gte: '>=',
@@ -13,7 +13,7 @@ module DefaultWhere
       ll: 'LIKE',
       :'' => '='
     }.freeze
-    
+
     def default_where_scope(params)
       where_string = []
       where_hash = {}
@@ -21,7 +21,7 @@ module DefaultWhere
       params.each do |key, value|
         real_key, sign_str = key.split('-')
         agent_key = key.gsub(/[-.\/]/, '_')
-        
+
         if value.nil? || value == []
           if sign_str == 'not'
             where_string << "#{real_key} IS NOT NULL"
@@ -48,14 +48,14 @@ module DefaultWhere
           else
             real_value = value
           end
-          
+
           where_string << "#{real_key} #{PATTERN[sign_str.to_s.to_sym]} :#{agent_key}"
           where_hash.merge! agent_key.to_sym => real_value
         end
       end
-      
+
       [where_string, where_hash]
     end
-    
+
   end
 end
