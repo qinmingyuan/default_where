@@ -16,7 +16,7 @@ module DefaultWhere
 
   def default_where(params = {})
     return all if params.blank?
-    
+
     params = params.to_h
     options = {}
     [:strip, :allow, :reject].each do |key|
@@ -24,7 +24,7 @@ module DefaultWhere
     end
     or_params = {}
     or_params = params.delete(:or) if params[:or].respond_to?(:to_hash)
-    
+
     and_params, and_refs, and_tables = default_where_params(params, options)
     order_params = default_where_order_filter(and_params)
     and_params.except!(*order_params.keys)
@@ -32,13 +32,13 @@ module DefaultWhere
     or_params, or_refs, or_tables = default_where_params(or_params, options)
     refs = and_refs + or_refs
     tables = and_tables + or_tables
-    
+
     includes(refs).default_where_and(and_params).default_where_or(or_params).default_where_order(order_params).references(tables)
   end
 
   def default_where_and(params = {})
     return current_scope if params.blank?
-    
+
     equal_params = {}
     params.each do |key, _|
       equal_params[key] = params.delete(key) unless key.match? /[-\/]/
@@ -48,18 +48,18 @@ module DefaultWhere
 
     where(equal_params).where(where_string, where_hash)
   end
-  
+
   def default_where_or(params = {})
     return current_scope if params.blank?
 
     where_string, where_hash = default_where_scope(params)
     where_string = where_string.join ' OR '
-    
+
     where(where_string, where_hash)
   end
-  
+
   def logger
-    ActiveRecord::Base.logger
+    ::ActiveRecord::Base.logger
   end
 
 end
