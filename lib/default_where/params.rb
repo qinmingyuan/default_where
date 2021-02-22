@@ -2,17 +2,17 @@
 
 module DefaultWhere
   module Params
-  
+
     def default_where_params(params = {}, options = {})
       refs = []
       tables = []
       final_params = {}
-    
+
       params.each do |key, value|
         # strip, if assign key to false, will not works
         strip = options.fetch(:strip, {}).fetch(key, STRIP)
         value = value.strip if value.is_a?(String) && strip
-      
+
         # reject
         if options.key?(:reject)
           reject = options.fetch(:reject, {}).fetch(key, REJECT)
@@ -33,18 +33,18 @@ module DefaultWhere
           reject = REJECT - allow
         end
         next if reject.include?(value)
-      
+
         items = key.to_s.split('.')
         column = items[-1]
         real_column = column.split(/[-\/]/)[0]
-      
+
         if items.size == 1
           next unless column_names.include?(real_column)
-          table = table_name
+          table = nil
         else
           prefix = items[0]
           ref = reflections[prefix]
-        
+
           # 检查 prefix 是否为关联关系的名称
           if ref && !ref.polymorphic?
             table = ref.table_name
@@ -58,28 +58,32 @@ module DefaultWhere
             else
               raise "#{key} makes confused, please use reflection name!"
             end
-          
+
             table = prefix
           else
             next
           end
-        
+
           if ref && !ref.klass.column_names.include?(real_column)
             next
           end
-        
+
           if ref && !refs.include?(ref.name)
             refs << ref.name
           end
-        
+
           unless tables.include?(table)
             tables << table
           end
         end
-      
-        final_params["#{table}.#{column}"] = value
+
+        if table
+          final_params["#{table}.#{column}"] = value
+        else
+          final_params[column] = value
+        end
       end
-    
+
       [final_params, refs, tables]
     end
 
