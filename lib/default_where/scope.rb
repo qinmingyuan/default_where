@@ -49,7 +49,7 @@ module DefaultWhere
             real_value = value
           end
 
-          where_string << "#{real_key} #{PATTERN[sign_str.to_s.to_sym]} :#{agent_key}"
+          where_string << "#{table_name}.#{real_key} #{PATTERN[sign_str.to_s.to_sym]} :#{agent_key}"
           where_hash.merge! agent_key.to_sym => real_value
         end
       end
