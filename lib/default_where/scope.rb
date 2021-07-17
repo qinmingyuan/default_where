@@ -30,10 +30,10 @@ module DefaultWhere
           else
             raise "#{key}'s value can not be nil"
           end
-        elsif sign_str == 'any'
+        elsif sign_str == 'any' # 支持 postgres array 查询
           where_string << ":#{agent_key} = ANY(#{real_key})"
           where_hash.merge! agent_key.to_sym => value
-        elsif real_key.match? /.\/./
+        elsif real_key.match?(/.\/./) # 支持 postgres json 查询
           real_key, i18n_key = key.split('/')
           where_string << "#{real_key}->>'#{i18n_key}' = :#{agent_key}"
           where_hash.merge! agent_key.to_sym => value
