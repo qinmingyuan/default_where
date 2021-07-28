@@ -167,4 +167,5 @@ User.includes(:role).where(name: params[:name], 'roles.id': params[:'role.id']).
 User.default_where(params)
 ```
 
-## 注意
+## 许可证
+遵循 MIT 协议
