@@ -8,7 +8,7 @@ Gem::Specification.new do |s|
   s.email = ['mingyuan0715@foxmail.com']
   s.homepage = 'https://github.com/qinmingyuan/default_where'
   s.summary = 'default process params for where'
-  s.description = 'Description of'
+  s.description = 'Default where'
   s.license = 'MIT'
 
   s.files = Dir[
@@ -22,5 +22,4 @@ Gem::Specification.new do |s|
   s.add_runtime_dependency 'activerecord', '>= 4.0', '<= 7.0'
   s.add_development_dependency 'sdoc', '~> 1.0'
   s.add_development_dependency 'rake', '~> 12.3'
-  s.add_development_dependency 'factory_bot_rails', '~> 4.11'
 end
