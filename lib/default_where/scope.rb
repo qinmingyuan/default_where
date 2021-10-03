@@ -19,7 +19,7 @@ module DefaultWhere
       where_hash = {}
 
       params.each do |key, value|
-        real_key, sign_str = key.split('-')
+        real_key, sign_str = key.to_s.split('-')
         agent_key = key.gsub(/[-.\/]/, '_')
 
         if value.nil? || value == []
