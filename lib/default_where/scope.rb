@@ -13,6 +13,11 @@ module DefaultWhere
       ll: 'LIKE',
       :'' => '='
     }.freeze
+    POSTGRES_PATTERN = {
+      like: 'ILIKE',
+      rl: 'ILIKE',
+      ll: 'ILIKE'
+    }.freeze
 
     def default_where_scope(params)
       where_string = []

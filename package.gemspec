@@ -1,10 +1,9 @@
 $:.push File.expand_path('lib', __dir__)
-require 'default_where/version'
 
 Gem::Specification.new do |s|
   s.name = 'default_where'
-  s.version = DefaultWhere::VERSION
-  s.authors = ['qinmingyuan']
+  s.version = '2.3.0'
+  s.authors = ['Mingyuan Qin']
   s.email = ['mingyuan0715@foxmail.com']
   s.homepage = 'https://github.com/qinmingyuan/default_where'
   s.summary = 'default process params for where'
