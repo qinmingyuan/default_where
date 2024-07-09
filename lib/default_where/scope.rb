@@ -24,7 +24,11 @@ module DefaultWhere
       where_hash = {}
 
       params.each do |key, value|
-        real_key, sign_str = key.to_s.split('-', 2)
+        if key.to_s.include?('->')
+          real_key, sign_str = key.to_s.split('->', 2)
+        else
+          real_key, sign_str = key.to_s.split('-', 2)
+        end
         agent_key = key.to_s.gsub(/[->.:]/, '_')
 
         if value.nil? || value == []
@@ -38,7 +42,7 @@ module DefaultWhere
         elsif sign_str == 'any' # 支持 postgres array 查询
           where_string << ":#{agent_key} = ANY(#{real_key})"
           where_hash.merge! agent_key.to_sym => value
-        elsif sign_str.match?(/->/) # 支持 postgres json 查询
+        elsif key.to_s.match?(/->/) # 支持 postgres json 查询
           keys = sign_str.split('->')
           if keys.size == 1
             where_string << "#{real_key}->'#{sign_str}' = :#{agent_key}"
