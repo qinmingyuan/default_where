@@ -41,7 +41,7 @@ module DefaultWhere
 
     equal_params = {}
     params.each do |key, _|
-      equal_params[key] = params.delete(key) unless key.match? /[-\/]/
+      equal_params[key] = params.delete(key) unless key.match? /->|-/
     end
     where_string, where_hash = default_where_scope(params)
     where_string = where_string.join ' AND '

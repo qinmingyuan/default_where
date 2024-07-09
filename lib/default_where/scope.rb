@@ -45,7 +45,7 @@ module DefaultWhere
         elsif key.to_s.match?(/->/) # 支持 postgres json 查询
           keys = sign_str.split('->')
           if keys.size == 1
-            where_string << "#{real_key}->'#{sign_str}' = :#{agent_key}"
+            where_string << "#{real_key}->>'#{sign_str}' = :#{agent_key}"
           elsif keys.size == 2
             where_string << "#{real_key}->'#{keys[0]}'->>'#{keys[1]}' = :#{agent_key}"
           end
