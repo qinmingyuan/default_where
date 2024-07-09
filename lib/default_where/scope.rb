@@ -25,7 +25,7 @@ module DefaultWhere
 
       params.each do |key, value|
         real_key, sign_str = key.to_s.split('-', 2)
-        agent_key = key.gsub(/[->.:]/, '_')
+        agent_key = key.to_s.gsub(/[->.:]/, '_')
 
         if value.nil? || value == []
           if sign_str == 'not'
